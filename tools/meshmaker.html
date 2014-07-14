@@ -1,0 +1,27 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>LICA - Navigation Mesh Maker</title>
+    <link rel="stylesheet" type="text/css" href="tools.css" />
+</head>
+<body>
+    <div id="content">
+        <h1>LICA Navigation Mesh Maker</h1>
+        <p id="fileName"></p>
+        <canvas id="canvas">
+        </canvas><br />
+        <p id="errorMessage"></p>
+        <input type="file" id="file"/><br/>
+        <button>Render Mesh</button>
+        <button>Reset Mesh</button>
+
+        <label>Draw:</label>
+        <input type="radio" name="mode" value="points" checked="checked"><label for="mode">Points</label>
+        <input type="radio" name="mode" value="links"><label for="mode">Links</label>
+    </div>
+
+    <script src="tools.js"></script>
+</body>
+</html>
