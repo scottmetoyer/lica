@@ -2,8 +2,13 @@ var Meshmaker = (function () {
     var canvas = document.getElementById('canvas');
     var context = canvas.getContext('2d');
     var polygons = new Array();
+    var currentPoint = null;
     var currentPolygon = null;
     var image = null;
+
+    function initialize() {
+        loop();
+    }
 
     function handleFileSelect(event) {
         var file = event.target.files[0];
@@ -21,65 +26,20 @@ var Meshmaker = (function () {
                 image.src = e.target.result;
 
                 image.onload = function () {
-                    var canvas = document.getElementById('canvas');
-                    var context = canvas.getContext('2d');
-
                     canvas.height = image.height;
                     canvas.width = image.width;
                     context.drawImage(image, 0, 0);
-
-                    currentPolygon = null;
                     polygons = new Array();
+                    currentPolygon = null;
+                    currentPoint = null;
                 }
             };
         })(file);
 
         // Read in the image file as a data URL.
         reader.readAsDataURL(file);
-    }
-
-    function handleMeshClick(event) {
-        if (!image) {
-            return;
-        }
-
-        var point = getCursorPosition(event);
-
-        if (document.getElementById('points').checked) {
-            if (!currentPolygon) {
-                currentPolygon = new Array();
-            }
-
-            // Add the point to the polygon array
-            currentPolygon.push(point);
-
-            // Draw the connecting line from the previous point
-            if (currentPolygon.length > 1) {
-                var firstPoint = currentPolygon[0];
-                var previousPoint = currentPolygon[currentPolygon.length - 2];
-
-                // Check if this click closes the polygon
-                if (point.X >= firstPoint.X - 4 && point.X <= firstPoint.X + 4 &&
-                    point.Y >= firstPoint.Y - 4 && point.Y <= firstPoint.Y + 4) {
-                    point.X = firstPoint.X;
-                    point.Y = firstPoint.Y;
-
-                    currentPolygon[currentPolygon.length - 1] = point;
-                    polygons.push(currentPolygon);
-                    drawPolygon(currentPolygon);
-                    currentPolygon = null;
-                }
-
-                context.beginPath();
-                context.moveTo(point.X, point.Y);
-                context.lineTo(previousPoint.X, previousPoint.Y);
-                context.strokeStyle = 'blue';
-                context.stroke();
-            }
-
-            // Draw the point
-            drawCircle(point, 4, 'blue');
-        }
+        event.preventDefault();
+        event.stopPropagation();
     }
 
     function handleMouseMove(event) {
@@ -96,6 +56,22 @@ var Meshmaker = (function () {
         }
     }
 
+    function dropPolygon(position) {
+        var size = 20;
+        var topLeft = { X: position.X - size, Y: position.Y - size };
+        var topRight = { X: position.X + size, Y: position.Y - size };
+        var bottomRight = { X: position.X + size, Y: position.Y + size };
+        var bottomLeft = { X: position.X - size, Y: position.Y + size };
+
+        var polygon = new Array();
+        polygon.push(topLeft);
+        polygon.push(topRight);
+        polygon.push(bottomRight);
+        polygon.push(bottomLeft);
+
+        polygons.push(polygon);
+    }
+
     function drawCircle(position, radius, color) {
         context.beginPath();
         context.arc(position.X, position.Y, radius, 0, 2 * Math.PI, false);
@@ -103,24 +79,33 @@ var Meshmaker = (function () {
         context.fill();
     }
 
-    function drawPolygon(polygon)  {
-        if (polygon.length > 0) {
+    function drawShape(shape) {
+        if (shape.length > 0) {
             context.fillStyle = 'rgba(0, 0, 255, 0.5)';
             context.beginPath();
 
             // Set start point
-            context.moveTo(polygon[0].X, polygon[0].Y);
+            context.moveTo(shape[0].X, shape[0].Y);
 
             // Draw the polygon
-            for (var i = 1; i < polygon.length; i++) {
-                context.lineTo(polygon[i].X, polygon[i].Y);
+            for (var i = 1; i < shape.length; i++) {
+                context.lineTo(shape[i].X, shape[i].Y);
             }
 
             context.closePath();
             context.strokeStyle = 'blue';
             context.stroke();
             context.fill();
+
+            // Draw the grab handles
+            for (var i = 0; i < shape.length; i++) {
+                drawCircle({ X: shape[i].X, Y: shape[i].Y }, 4, 'yellow');
+            }
         }
+    }
+
+    function clearCanvas() {
+        polygons = new Array();
     }
 
     function getCursorPosition(event) {
@@ -131,13 +116,59 @@ var Meshmaker = (function () {
         };
     }
 
+    function renderMesh() {
+        var cellSize = 5;
+        var width = canvas.clientWidth / cellSize;
+        var height = canvas.clientHeight / cellSize;
+        var grid = [[]];
+
+        for (var y = 0; y < height; y++) {
+            for (var x = 0; x < width; x++) {
+                grid[x][y] = checkCell(x, y, cellSize);
+            }
+        }
+    }
+
+    function handleMouseDown(event) {
+
+    }
+
+    function handleMouseUp(event) {
+        if (image) {
+            var position = getCursorPosition(event);
+            dropPolygon(position);
+        }
+    }
+
+    function loop() {
+        window.requestAnimationFrame(loop);
+
+        context.clearRect(0, 0, canvas.clientWidth, canvas.clientHeight);
+
+        if (image) {
+            context.drawImage(image, 0, 0);
+        }
+
+        for (var i = 0; i < polygons.length; i++) {
+            drawShape(polygons[i]);
+        }
+    }
+
     return {
         handleFileSelect: handleFileSelect,
-        handleMeshClick: handleMeshClick,
-        handleMouseMove: handleMouseMove
+        handleMouseMove: handleMouseMove,
+        handleCanvasReset: clearCanvas,
+        handleMeshRender: renderMesh,
+        handleMouseUp: handleMouseUp,
+        handleMouseDown: handleMouseDown,
+        initialize: initialize
     };
 })();
 
 document.getElementById('file').addEventListener('change', Meshmaker.handleFileSelect, false);
-document.getElementById('canvas').addEventListener('click', Meshmaker.handleMeshClick, false);
+document.getElementById('reset').addEventListener('click', Meshmaker.handleCanvasReset, false);
+document.getElementById('render').addEventListener('click', Meshmaker.handleMeshRender, false);
+document.getElementById('canvas').addEventListener('mousedown', Meshmaker.handleMouseDown, false);
+document.getElementById('canvas').addEventListener('mouseup', Meshmaker.handleMouseUp, false);
 document.getElementById('canvas').addEventListener('mousemove', Meshmaker.handleMouseMove, false);
+window.addEventListener('load', Meshmaker.initialize, false);
