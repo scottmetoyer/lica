@@ -10,6 +10,33 @@ var Meshmaker = (function () {
         loop();
     }
 
+    function isConcave(polygon) {
+        var positive = 0;
+        var negative = 0;
+        var length = polygon.length;
+
+        for (var i = 0; i < length; i++) {
+            var p0 = polygon[i];
+            var p1 = polygon[(i + 1) % length];
+            var p2 = polygon[(i + 2) % length];
+
+            // Subtract to get vectors
+            var v0 = { X: p0.X - p1.X, Y: p0.Y - p1.Y };
+            var v1 = { X: p1.X - p2.X, Y: p1.Y - p2.Y };
+            var cross = (v0.X * v1.Y) - (v0.Y * v1.X);
+
+            if (cross < 0) {
+                negative++;
+            }
+            else {
+                positive++;
+            }
+        }
+
+        return (negative != 0 && positive != 0);
+    }
+
+
     function handleFileSelect(event) {
         var file = event.target.files[0];
 
@@ -67,7 +94,12 @@ var Meshmaker = (function () {
 
     function drawShape(shape) {
         if (shape.length > 0) {
-            context.fillStyle = 'rgba(0, 0, 255, 0.5)';
+            if (isConcave(shape)) {
+                context.fillStyle = 'rgba(255, 0, 0, 0.5)';
+            }
+            else {
+                context.fillStyle = 'rgba(0, 0, 255, 0.5)';
+            }
             context.beginPath();
 
             // Set start point
@@ -116,20 +148,22 @@ var Meshmaker = (function () {
                 }
             }
         }
-    }
 
-    function handleMouseUp(event) {
         if (image && !draggingPoint) {
             var position = getCursorPosition(event);
             dropPolygon(position);
         }
+    }
 
+    function handleMouseUp(event) {
         draggingPoint = null;
     }
 
     function handleMouseMove(event) {
         if (draggingPoint) {
             var position = getCursorPosition(event);
+
+            // Check bounds
             draggingPoint.X = position.X;
             draggingPoint.Y = position.Y;
         }

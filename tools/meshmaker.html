@@ -10,12 +10,14 @@
     <div id="content">
         <h1>LICA Navigation Mesh Maker</h1>
         <p id="fileName"></p>
-        <canvas id="canvas">
-        </canvas><br />
+        <canvas id="canvas"></canvas><br />
         <p id="errorMessage"></p>
-        <input type="file" id="file"/><br/>
+        <input type="file" id="file" /><br />
         <button id="render">Render Navigation Map</button>
         <button id="reset">Reset</button>
+        <label>Draw</label>
+        <label><input type="radio" name="draw" id="areas" />&nbsp;Draw Walk Areas</label>
+        <label><input type="radio" name="draw" id="connectors" />&nbsp;Draw Connectors</label>
     </div>
 
     <script src="meshmaker.js"></script>

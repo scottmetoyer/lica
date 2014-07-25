@@ -13,7 +13,7 @@ body, html {
     padding: 10px;
 }
 
-canvas{
+canvas {
 }
 
 button {
@@ -26,6 +26,10 @@ label {
 
 input[type=file] {
     margin-bottom: 10px;
+}
+
+input[type=radio] {
+    vertical-align: baseline;
 }
 
 #errorMessage {
