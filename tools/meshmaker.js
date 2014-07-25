@@ -1,8 +1,8 @@
 var Meshmaker = (function () {
     var canvas = document.getElementById('canvas');
     var context = canvas.getContext('2d');
-    var polygons = new Array();
-    var currentPoint = null;
+    var polygons = [];
+    var draggingPoint = null;
     var currentPolygon = null;
     var image = null;
 
@@ -29,9 +29,9 @@ var Meshmaker = (function () {
                     canvas.height = image.height;
                     canvas.width = image.width;
                     context.drawImage(image, 0, 0);
-                    polygons = new Array();
+                    polygons = [];
                     currentPolygon = null;
-                    currentPoint = null;
+                    draggingPoint = null;
                 }
             };
         })(file);
@@ -42,28 +42,14 @@ var Meshmaker = (function () {
         event.stopPropagation();
     }
 
-    function handleMouseMove(event) {
-        if (currentPolygon && currentPolygon.length > 1) {
-            var position = getCursorPosition(event);
-            var firstPoint = currentPolygon[0];
-
-            if (position.X >= firstPoint.X - 4 && position.X <= firstPoint.X + 4 &&
-                position.Y >= firstPoint.Y - 4 && position.Y <= firstPoint.Y + 4) {
-                drawCircle(firstPoint, 4, 'yellow');
-            } else {
-                drawCircle(firstPoint, 4, 'blue');
-            }
-        }
-    }
-
     function dropPolygon(position) {
-        var size = 20;
+        var size = 30;
         var topLeft = { X: position.X - size, Y: position.Y - size };
         var topRight = { X: position.X + size, Y: position.Y - size };
         var bottomRight = { X: position.X + size, Y: position.Y + size };
         var bottomLeft = { X: position.X - size, Y: position.Y + size };
 
-        var polygon = new Array();
+        var polygon = [];
         polygon.push(topLeft);
         polygon.push(topRight);
         polygon.push(bottomRight);
@@ -99,13 +85,13 @@ var Meshmaker = (function () {
 
             // Draw the grab handles
             for (var i = 0; i < shape.length; i++) {
-                drawCircle({ X: shape[i].X, Y: shape[i].Y }, 4, 'yellow');
+                drawCircle({ X: shape[i].X, Y: shape[i].Y }, 5, 'yellow');
             }
         }
     }
 
     function clearCanvas() {
-        polygons = new Array();
+        polygons = [];
     }
 
     function getCursorPosition(event) {
@@ -116,33 +102,41 @@ var Meshmaker = (function () {
         };
     }
 
-    function renderMesh() {
-        var cellSize = 5;
-        var width = canvas.clientWidth / cellSize;
-        var height = canvas.clientHeight / cellSize;
-        var grid = [[]];
+    function handleMouseDown(event) {
+        var position = getCursorPosition(event);
 
-        for (var y = 0; y < height; y++) {
-            for (var x = 0; x < width; x++) {
-                grid[x][y] = checkCell(x, y, cellSize);
+        // Check if over a drag handle
+        for (var x = 0; x < polygons.length; x++) {
+            var polygon = polygons[x];
+
+            for (var y = 0; y < polygon.length; y++) {
+                if (position.X > polygon[y].X - 5 && position.X < polygon[y].X + 5
+                    && position.Y > polygon[y].Y - 5 && position.Y < polygon[y].Y + 5) {
+                    draggingPoint = polygon[y];
+                }
             }
         }
     }
 
-    function handleMouseDown(event) {
-
-    }
-
     function handleMouseUp(event) {
-        if (image) {
+        if (image && !draggingPoint) {
             var position = getCursorPosition(event);
             dropPolygon(position);
+        }
+
+        draggingPoint = null;
+    }
+
+    function handleMouseMove(event) {
+        if (draggingPoint) {
+            var position = getCursorPosition(event);
+            draggingPoint.X = position.X;
+            draggingPoint.Y = position.Y;
         }
     }
 
     function loop() {
         window.requestAnimationFrame(loop);
-
         context.clearRect(0, 0, canvas.clientWidth, canvas.clientHeight);
 
         if (image) {
@@ -158,7 +152,6 @@ var Meshmaker = (function () {
         handleFileSelect: handleFileSelect,
         handleMouseMove: handleMouseMove,
         handleCanvasReset: clearCanvas,
-        handleMeshRender: renderMesh,
         handleMouseUp: handleMouseUp,
         handleMouseDown: handleMouseDown,
         initialize: initialize
