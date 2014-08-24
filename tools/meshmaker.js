@@ -36,6 +36,44 @@ var Meshmaker = (function () {
         return (negative != 0 && positive != 0);
     }
 
+    function computeCentroid(vertices, vertexCount) {
+        var centroid = { X: 0, Y: 0 };
+        var signedArea = 0.0;
+        var x0 = 0.0; // Current vertex X
+        var y0 = 0.0; // Current vertex Y
+        var x1 = 0.0; // Next vertex X
+        var y1 = 0.0; // Next vertex Y
+        var a = 0.0;  // Partial signed area
+
+        // For all vertices except last
+        var i = 0;
+        for (i = 0; i < vertexCount - 1; ++i) {
+            x0 = vertices[i].X;
+            y0 = vertices[i].Y;
+            x1 = vertices[i + 1].X;
+            y1 = vertices[i + 1].Y;
+            a = x0 * y1 - x1 * y0;
+            signedArea += a;
+            centroid.X += (x0 + x1) * a;
+            centroid.Y += (y0 + y1) * a;
+        }
+
+        // Do last vertex
+        x0 = vertices[i].X;
+        y0 = vertices[i].Y;
+        x1 = vertices[0].X;
+        y1 = vertices[0].Y;
+        a = x0 * y1 - x1 * y0;
+        signedArea += a;
+        centroid.X += (x0 + x1) * a;
+        centroid.Y += (y0 + y1) * a;
+
+        signedArea *= 0.5;
+        centroid.X /= (6.0 * signedArea);
+        centroid.Y /= (6.0 * signedArea);
+
+        return centroid;
+    }
 
     function handleFileSelect(event) {
         var file = event.target.files[0];
@@ -57,8 +95,8 @@ var Meshmaker = (function () {
                     canvas.width = image.width;
                     context.drawImage(image, 0, 0);
                     polygons = [];
-                    currentPolygon = null;
                     draggingPoint = null;
+                    currentPolygon = null;
                 }
             };
         })(file);
@@ -76,12 +114,12 @@ var Meshmaker = (function () {
         var bottomRight = { X: position.X + size, Y: position.Y + size };
         var bottomLeft = { X: position.X - size, Y: position.Y + size };
 
-        var polygon = [];
-        polygon.push(topLeft);
-        polygon.push(topRight);
-        polygon.push(bottomRight);
-        polygon.push(bottomLeft);
-
+        var polygon = { vertices: [], centroid: {X:0, Y: 0}};
+        polygon.vertices.push(topLeft);
+        polygon.vertices.push(topRight);
+        polygon.vertices.push(bottomRight);
+        polygon.vertices.push(bottomLeft);
+        polygon.centroid = computeCentroid(polygon.vertices, 4);
         polygons.push(polygon);
     }
 
@@ -92,22 +130,25 @@ var Meshmaker = (function () {
         context.fill();
     }
 
-    function drawShape(shape) {
-        if (shape.length > 0) {
-            if (isConcave(shape)) {
+    function drawPolygon(polygon) {
+        if (polygon.vertices.length > 0) {
+            var drawCentroid = false;
+
+            if (isConcave(polygon.vertices)) {
                 context.fillStyle = 'rgba(255, 0, 0, 0.5)';
             }
             else {
+                drawCentroid = true;
                 context.fillStyle = 'rgba(0, 0, 255, 0.5)';
             }
             context.beginPath();
 
             // Set start point
-            context.moveTo(shape[0].X, shape[0].Y);
+            context.moveTo(polygon.vertices[0].X, polygon.vertices[0].Y);
 
             // Draw the polygon
-            for (var i = 1; i < shape.length; i++) {
-                context.lineTo(shape[i].X, shape[i].Y);
+            for (var i = 1; i < polygon.vertices.length; i++) {
+                context.lineTo(polygon.vertices[i].X, polygon.vertices[i].Y);
             }
 
             context.closePath();
@@ -116,8 +157,13 @@ var Meshmaker = (function () {
             context.fill();
 
             // Draw the grab handles
-            for (var i = 0; i < shape.length; i++) {
-                drawCircle({ X: shape[i].X, Y: shape[i].Y }, 5, 'yellow');
+            for (var i = 0; i < polygon.vertices.length; i++) {
+                drawCircle({ X: polygon.vertices[i].X, Y: polygon.vertices[i].Y }, 5, 'yellow');
+            }
+
+            // Compute and draw the centroid
+            if (drawCentroid) {
+                drawCircle({ X: polygon.centroid.X, Y: polygon.centroid.Y }, 5, 'white');
             }
         }
     }
@@ -137,26 +183,33 @@ var Meshmaker = (function () {
     function handleMouseDown(event) {
         var position = getCursorPosition(event);
 
-        // Check if over a drag handle
-        for (var x = 0; x < polygons.length; x++) {
-            var polygon = polygons[x];
+        // Are we creating areas or linking polygons?
+        if (document.getElementById('areas').checked) {
+            // Check if over a drag handle
+            for (var x = 0; x < polygons.length; x++) {
+                var polygon = polygons[x];
 
-            for (var y = 0; y < polygon.length; y++) {
-                if (position.X > polygon[y].X - 5 && position.X < polygon[y].X + 5
-                    && position.Y > polygon[y].Y - 5 && position.Y < polygon[y].Y + 5) {
-                    draggingPoint = polygon[y];
+                for (var y = 0; y < polygon.vertices.length; y++) {
+                    if (position.X > polygon.vertices[y].X - 5 && position.X < polygon.vertices[y].X + 5
+                        && position.Y > polygon.vertices[y].Y - 5 && position.Y < polygon.vertices[y].Y + 5) {
+                        draggingPoint = polygon.vertices[y];
+                        currentPolygon = polygon;
+                    }
                 }
             }
-        }
 
-        if (image && !draggingPoint) {
-            var position = getCursorPosition(event);
-            dropPolygon(position);
+            if (image && !draggingPoint) {
+                var position = getCursorPosition(event);
+                dropPolygon(position);
+            }
+        } else {
+
         }
     }
 
     function handleMouseUp(event) {
         draggingPoint = null;
+        currentPolygon = null;
     }
 
     function handleMouseMove(event) {
@@ -166,6 +219,9 @@ var Meshmaker = (function () {
             // Check bounds
             draggingPoint.X = position.X;
             draggingPoint.Y = position.Y;
+
+            // Recalulate the centroid
+            currentPolygon.centroid = computeCentroid(currentPolygon.vertices, 4);
         }
     }
 
@@ -178,7 +234,7 @@ var Meshmaker = (function () {
         }
 
         for (var i = 0; i < polygons.length; i++) {
-            drawShape(polygons[i]);
+            drawPolygon(polygons[i]);
         }
     }
 
