@@ -10,71 +10,6 @@ var Meshmaker = (function () {
         loop();
     }
 
-    function isConcave(polygon) {
-        var positive = 0;
-        var negative = 0;
-        var length = polygon.length;
-
-        for (var i = 0; i < length; i++) {
-            var p0 = polygon[i];
-            var p1 = polygon[(i + 1) % length];
-            var p2 = polygon[(i + 2) % length];
-
-            // Subtract to get vectors
-            var v0 = { X: p0.X - p1.X, Y: p0.Y - p1.Y };
-            var v1 = { X: p1.X - p2.X, Y: p1.Y - p2.Y };
-            var cross = (v0.X * v1.Y) - (v0.Y * v1.X);
-
-            if (cross < 0) {
-                negative++;
-            }
-            else {
-                positive++;
-            }
-        }
-
-        return (negative != 0 && positive != 0);
-    }
-
-    function computeCentroid(vertices, vertexCount) {
-        var centroid = { X: 0, Y: 0 };
-        var signedArea = 0.0;
-        var x0 = 0.0; // Current vertex X
-        var y0 = 0.0; // Current vertex Y
-        var x1 = 0.0; // Next vertex X
-        var y1 = 0.0; // Next vertex Y
-        var a = 0.0;  // Partial signed area
-
-        // For all vertices except last
-        var i = 0;
-        for (i = 0; i < vertexCount - 1; ++i) {
-            x0 = vertices[i].X;
-            y0 = vertices[i].Y;
-            x1 = vertices[i + 1].X;
-            y1 = vertices[i + 1].Y;
-            a = x0 * y1 - x1 * y0;
-            signedArea += a;
-            centroid.X += (x0 + x1) * a;
-            centroid.Y += (y0 + y1) * a;
-        }
-
-        // Do last vertex
-        x0 = vertices[i].X;
-        y0 = vertices[i].Y;
-        x1 = vertices[0].X;
-        y1 = vertices[0].Y;
-        a = x0 * y1 - x1 * y0;
-        signedArea += a;
-        centroid.X += (x0 + x1) * a;
-        centroid.Y += (y0 + y1) * a;
-
-        signedArea *= 0.5;
-        centroid.X /= (6.0 * signedArea);
-        centroid.Y /= (6.0 * signedArea);
-
-        return centroid;
-    }
-
     function handleFileSelect(event) {
         var file = event.target.files[0];
 
@@ -119,7 +54,7 @@ var Meshmaker = (function () {
         polygon.vertices.push(topRight);
         polygon.vertices.push(bottomRight);
         polygon.vertices.push(bottomLeft);
-        polygon.centroid = computeCentroid(polygon.vertices, 4);
+        polygon.centroid = Polygon.computeCentroid(polygon.vertices, 4);
         polygons.push(polygon);
     }
 
@@ -134,7 +69,7 @@ var Meshmaker = (function () {
         if (polygon.vertices.length > 0) {
             var drawCentroid = false;
 
-            if (isConcave(polygon.vertices)) {
+            if (Polygon.isConcave(polygon.vertices)) {
                 context.fillStyle = 'rgba(255, 0, 0, 0.5)';
             }
             else {
@@ -221,7 +156,7 @@ var Meshmaker = (function () {
             draggingPoint.Y = position.Y;
 
             // Recalulate the centroid
-            currentPolygon.centroid = computeCentroid(currentPolygon.vertices, 4);
+            currentPolygon.centroid = Polygon.computeCentroid(currentPolygon.vertices, 4);
         }
     }
 
