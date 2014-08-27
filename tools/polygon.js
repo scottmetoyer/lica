@@ -1,4 +1,19 @@
 var Polygon = (function () {
+    function checkIntersection(vertices, point, diameter) {
+        var intersects = false;
+
+        for (var i = 0, j = vertices.length - 1; i < vertices.length; j = i++)
+        {
+            if ((((vertices[i].Y <= point.Y + diameter) && (point.Y - diameter< vertices[j].Y)) ||
+                    ((vertices[j].Y <= point.Y + diameter) && (point.Y - diameter < vertices[i].Y))) &&
+                (point.X - diameter < (vertices[j].X - vertices[i].X) * (point.Y - diameter - vertices[i].Y) / (vertices[j].Y - vertices[i].Y) + vertices[i].X))
+
+                intersects = !intersects;
+        }
+
+        return intersects;
+    }
+
     function isConcave(vertices) {
         var positive = 0;
         var negative = 0;
@@ -66,6 +81,7 @@ var Polygon = (function () {
 
     return {
         isConcave: isConcave,
-        computeCentroid: computeCentroid
+        computeCentroid: computeCentroid,
+        checkIntersection: checkIntersection
     };
 })();
