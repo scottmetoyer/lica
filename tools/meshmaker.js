@@ -106,7 +106,7 @@ var Meshmaker = (function () {
 
             // Draw the centroid
             if (isConvex) {
-                drawCircle(polygon.centroid, diameter, 'white');
+                drawCircle(polygon.centroid, diameter, 'lightslategray');
             }
         }
     }
@@ -201,31 +201,9 @@ var Meshmaker = (function () {
             context.drawImage(image, 0, 0);
         }
 
-        // Draw the polygons and link lines
+        // Draw the polygons
         for (var i = 0; i < polygons.length; i++) {
             drawPolygon(polygons[i]);
-            points = [];
-
-            points.push(polygons[i].centroid);
-
-            for (var j = 0; j < links.length; j++) {
-                if (Polygon.checkPointInPolygon(polygons[i].vertices, links[j])) {
-                    points.push(links[j]);
-                }
-            }
-
-            if (points.length > 0) {
-                context.beginPath();
-                context.moveTo(points[0].X, points[0].Y);
-
-                for (var k = 1; k < points.length; k++) {
-                    context.lineTo(points[k].X, points[k].Y);
-                }
-
-                context.closePath();
-                context.strokeStyle = 'white';
-                context.stroke();
-            }
         }
 
         // Draw the link nodes
