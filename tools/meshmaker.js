@@ -209,7 +209,7 @@ var Meshmaker = (function () {
             points.push(polygons[i].centroid);
 
             for (var j = 0; j < links.length; j++) {
-                if (Polygon.checkIntersection(polygons[i].vertices, links[j], diameter)) {
+                if (Polygon.checkPointInPolygon(polygons[i].vertices, links[j])) {
                     points.push(links[j]);
                 }
             }
