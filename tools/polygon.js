@@ -1,11 +1,15 @@
+// polygon.js
+// Polygon helper functions
+// Scott Metoyer, 2014
+
 var Polygon = (function () {
     function checkPointInPolygon(vertices, point) {
         var intersects = false;
 
         for (var i = 0, j = vertices.length - 1; i < vertices.length; j = i++) {
-            if ((((vertices[i].Y <= point.Y) && (point.Y < vertices[j].Y)) ||
-                    ((vertices[j].Y <= point.Y) && (point.Y < vertices[i].Y))) &&
-                (point.X < (vertices[j].X - vertices[i].X) * (point.Y - vertices[i].Y) / (vertices[j].Y - vertices[i].Y) + vertices[i].X))
+            if ((((vertices[i].y <= point.y) && (point.y < vertices[j].y)) ||
+                    ((vertices[j].y <= point.y) && (point.y < vertices[i].y))) &&
+                (point.x < (vertices[j].x - vertices[i].x) * (point.y - vertices[i].y) / (vertices[j].y - vertices[i].y) + vertices[i].x))
 
                 intersects = !intersects;
         }
@@ -16,7 +20,26 @@ var Polygon = (function () {
     // http://doswa.com/2009/07/13/circle-segment-intersectioncollision.html
     function checkLineCollision(point1, point2, circlePosition, circleRadius) {
         var intersects = false;
-        var segmentVector = { X: point1.X - point2.X, Y: point2.Y - point2.Y };
+        var closest = new Vector2(0, 0);
+        var seg_v = point2.subtract(point1);
+        var pt_v = circlePosition.subtract(point1);
+        var seg_v_unit = seg_v.divide(seg_v.length());
+        var proj = pt_v.dot(seg_v_unit);
+
+        // Check the line endpoints
+        if ((proj <= 0) || proj >= seg_v.length()) {
+            intersects = false;
+        } else {
+            var proj_v = seg_v_unit.scale(proj);
+            closest = proj_v.add(point1);
+
+            // Calculate distance from circle center to closet point on the line - less than the radius?
+            var distance = circlePosition.subtract(closest);
+            if (distance.length() <= circleRadius) {
+                intersects = true;
+            }
+        }
+
         return intersects;
     }
 
@@ -31,9 +54,9 @@ var Polygon = (function () {
             var p2 = vertices[(i + 2) % length];
 
             // Subtract to get vectors
-            var v0 = { X: p0.X - p1.X, Y: p0.Y - p1.Y };
-            var v1 = { X: p1.X - p2.X, Y: p1.Y - p2.Y };
-            var cross = (v0.X * v1.Y) - (v0.Y * v1.X);
+            var v0 = p0.subtract(p1);
+            var v1 = p1.subtract(p2);
+            var cross = (v0.x * v1.y) - (v0.y * v1.x);
 
             if (cross < 0) {
                 negative++;
@@ -47,7 +70,7 @@ var Polygon = (function () {
     }
 
     function computeCentroid(vertices, vertexCount) {
-        var centroid = { X: 0, Y: 0 };
+        var centroid = new Vector2(0, 0);
         var signedArea = 0.0;
         var x0 = 0.0; // Current vertex X
         var y0 = 0.0; // Current vertex Y
@@ -58,29 +81,29 @@ var Polygon = (function () {
         // For all vertices except last
         var i = 0;
         for (i = 0; i < vertexCount - 1; ++i) {
-            x0 = vertices[i].X;
-            y0 = vertices[i].Y;
-            x1 = vertices[i + 1].X;
-            y1 = vertices[i + 1].Y;
+            x0 = vertices[i].x;
+            y0 = vertices[i].y;
+            x1 = vertices[i + 1].x;
+            y1 = vertices[i + 1].y;
             a = x0 * y1 - x1 * y0;
             signedArea += a;
-            centroid.X += (x0 + x1) * a;
-            centroid.Y += (y0 + y1) * a;
+            centroid.x += (x0 + x1) * a;
+            centroid.y += (y0 + y1) * a;
         }
 
         // Do last vertex
-        x0 = vertices[i].X;
-        y0 = vertices[i].Y;
-        x1 = vertices[0].X;
-        y1 = vertices[0].Y;
+        x0 = vertices[i].x;
+        y0 = vertices[i].y;
+        x1 = vertices[0].x;
+        y1 = vertices[0].y;
         a = x0 * y1 - x1 * y0;
         signedArea += a;
-        centroid.X += (x0 + x1) * a;
-        centroid.Y += (y0 + y1) * a;
+        centroid.x += (x0 + x1) * a;
+        centroid.y += (y0 + y1) * a;
 
         signedArea *= 0.5;
-        centroid.X /= (6.0 * signedArea);
-        centroid.Y /= (6.0 * signedArea);
+        centroid.x /= (6.0 * signedArea);
+        centroid.y /= (6.0 * signedArea);
 
         return centroid;
     }
@@ -88,6 +111,7 @@ var Polygon = (function () {
     return {
         isConcave: isConcave,
         computeCentroid: computeCentroid,
-        checkPointInPolygon: checkPointInPolygon
+        checkPointInPolygon: checkPointInPolygon,
+        checkLineCollision: checkLineCollision
     };
 })();

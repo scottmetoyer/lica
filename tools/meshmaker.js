@@ -48,29 +48,30 @@ var Meshmaker = (function () {
     }
 
     function dropPolygon(position) {
-        var size = 30;
-        var topLeft = { X: position.X - size, Y: position.Y - size };
-        var topRight = { X: position.X + size, Y: position.Y - size };
-        var bottomRight = { X: position.X + size, Y: position.Y + size };
-        var bottomLeft = { X: position.X - size, Y: position.Y + size };
+        var size = 50;
+        var topLeft = new Vector2(position.x - size, position.y - size);
+        var topRight = new Vector2(position.x + size, position.y - size);
+        var bottomRight = new Vector2(position.x + size, position.y + size);
+        var bottomLeft = new Vector2(position.x - size, position.y + size);
 
-        var polygon = { vertices: [], centroid: { X: 0, Y: 0 } };
+        var polygon = { vertices: [], centroid: new Vector2(0, 0) };
         polygon.vertices.push(topLeft);
         polygon.vertices.push(topRight);
         polygon.vertices.push(bottomRight);
         polygon.vertices.push(bottomLeft);
+
         polygon.centroid = Polygon.computeCentroid(polygon.vertices, 4);
         polygons.push(polygon);
     }
 
     function dropLink(position) {
-        var link = { X: position.X, Y: position.Y };
+        var link = position;
         links.push(link);
     }
 
     function drawCircle(position, radius, color) {
         context.beginPath();
-        context.arc(position.X, position.Y, radius, 0, 2 * Math.PI, false);
+        context.arc(position.x, position.y, radius, 0, 2 * Math.PI, false);
         context.fillStyle = color;
         context.fill();
     }
@@ -87,11 +88,11 @@ var Meshmaker = (function () {
                 context.fillStyle = 'rgba(0, 0, 255, 0.5)';
             }
             context.beginPath();
-            context.moveTo(polygon.vertices[0].X, polygon.vertices[0].Y);
+            context.moveTo(polygon.vertices[0].x, polygon.vertices[0].y);
 
             // Draw the polygon
             for (var i = 1; i < polygon.vertices.length; i++) {
-                context.lineTo(polygon.vertices[i].X, polygon.vertices[i].Y);
+                context.lineTo(polygon.vertices[i].x, polygon.vertices[i].y);
             }
 
             context.closePath();
@@ -101,7 +102,7 @@ var Meshmaker = (function () {
 
             // Draw the grab handles
             for (var i = 0; i < polygon.vertices.length; i++) {
-                drawCircle({ X: polygon.vertices[i].X, Y: polygon.vertices[i].Y }, diameter, 'yellow');
+                drawCircle(polygon.vertices[i], diameter, 'yellow');
             }
 
             // Draw the centroid
@@ -118,16 +119,13 @@ var Meshmaker = (function () {
 
     function getCursorPosition(event) {
         var rect = canvas.getBoundingClientRect();
-        return {
-            X: event.clientX - rect.left,
-            Y: event.clientY - rect.top
-        };
+        return new Vector2(event.clientX - rect.left, event.clientY - rect.top);
     }
 
     function checkHit(position, target) {
         var hit = false;
 
-        if (position.X > target.X - diameter && position.X < target.X + diameter && position.Y > target.Y - diameter && position.Y < target.Y + diameter) {
+        if (position.x > target.x - diameter && position.x < target.x + diameter && position.y > target.y - diameter && position.y < target.y + diameter) {
             hit = true;
         }
 
@@ -160,8 +158,6 @@ var Meshmaker = (function () {
         }
 
         if (image && !draggingVertex && !draggingLink) {
-            var position = getCursorPosition(event);
-
             if (polygonClick) {
                 dropPolygon(position);
             }
@@ -182,14 +178,14 @@ var Meshmaker = (function () {
         var position = getCursorPosition(event);
 
         if (draggingVertex) {
-            draggingVertex.X = position.X;
-            draggingVertex.Y = position.Y;
+            draggingVertex.x = position.x;
+            draggingVertex.y = position.y;
             currentPolygon.centroid = Polygon.computeCentroid(currentPolygon.vertices, 4);
         }
 
         if (draggingLink) {
-            draggingLink.X = position.X;
-            draggingLink.Y = position.Y;
+            draggingLink.x = position.x;
+            draggingLink.y = position.y;
         }
     }
 
@@ -208,7 +204,34 @@ var Meshmaker = (function () {
 
         // Draw the link nodes
         for (var i = 0; i < links.length; i++) {
-            drawCircle(links[i], diameter, 'white');
+            var intersects = false;
+
+            for (var x = 0; x < polygons.length; x++) {
+                var polygon = polygons[x];
+
+                // Check the circle center point for collision
+                if (Polygon.checkPointInPolygon(polygon.vertices, links[i])) {
+                    intersects = true;
+                }
+
+                // Check the first three lines of the polygon
+                for (var y = 0; y < 3; y++) {
+                    if (Polygon.checkLineCollision(polygon.vertices[y], polygon.vertices[y + 1], links[i], diameter) == true) {
+                        intersects = true;
+                    }
+                }
+
+                // Check the last line of the polygon
+                if (Polygon.checkLineCollision(polygon.vertices[3], polygon.vertices[0], links[i], diameter) == true) {
+                    intersects = true;
+                }
+            }
+
+            if (intersects) {
+                drawCircle(links[i], diameter, 'white');
+            } else {
+                drawCircle(links[i], diameter, 'lightgrey');
+            }
         }
     }
 
