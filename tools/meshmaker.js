@@ -206,6 +206,8 @@ var Meshmaker = (function () {
             drawPolygon(polygons[i]);
             points = [];
 
+            points.push(polygons[i].centroid);
+
             for (var j = 0; j < links.length; j++) {
                 if (Polygon.checkIntersection(polygons[i].vertices, links[j], diameter)) {
                     points.push(links[j]);
@@ -220,6 +222,7 @@ var Meshmaker = (function () {
                     context.lineTo(points[k].X, points[k].Y);
                 }
 
+                context.closePath();
                 context.strokeStyle = 'white';
                 context.stroke();
             }
