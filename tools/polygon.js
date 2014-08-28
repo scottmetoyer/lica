@@ -1,9 +1,8 @@
 var Polygon = (function () {
-    function checkIntersection(vertices, point, diameter) {
+    function checkPointInPolygon(vertices, point) {
         var intersects = false;
 
-        for (var i = 0, j = vertices.length - 1; i < vertices.length; j = i++)
-        {
+        for (var i = 0, j = vertices.length - 1; i < vertices.length; j = i++) {
             if ((((vertices[i].Y <= point.Y) && (point.Y < vertices[j].Y)) ||
                     ((vertices[j].Y <= point.Y) && (point.Y < vertices[i].Y))) &&
                 (point.X < (vertices[j].X - vertices[i].X) * (point.Y - vertices[i].Y) / (vertices[j].Y - vertices[i].Y) + vertices[i].X))
@@ -11,6 +10,13 @@ var Polygon = (function () {
                 intersects = !intersects;
         }
 
+        return intersects;
+    }
+
+    // http://doswa.com/2009/07/13/circle-segment-intersectioncollision.html
+    function checkLineCollision(point1, point2, circlePosition, circleRadius) {
+        var intersects = false;
+        var segmentVector = { X: point1.X - point2.X, Y: point2.Y - point2.Y };
         return intersects;
     }
 
@@ -82,6 +88,6 @@ var Polygon = (function () {
     return {
         isConcave: isConcave,
         computeCentroid: computeCentroid,
-        checkIntersection: checkIntersection
+        checkPointInPolygon: checkPointInPolygon
     };
 })();
