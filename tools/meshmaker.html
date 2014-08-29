@@ -4,20 +4,29 @@
 <head>
     <meta charset="utf-8" />
     <title>LICA - Navigation Mesh Maker</title>
+    <link rel="stylesheet" type="text/css" href="reset.css" />
     <link rel="stylesheet" type="text/css" href="tools.css" />
 </head>
 <body>
-    <div id="content">
+    <header>
         <h1>LICA Navigation Mesh Maker</h1>
+    </header>
+    <div id="content">
         <p id="fileName"></p>
         <canvas id="canvas"></canvas><br />
         <p id="errorMessage"></p>
-        <input type="file" id="file" /><br />
-        <button id="render">Render Navigation Map</button>
-        <button id="reset">Reset</button>
-        <label><input type="radio" name="draw" id="polygons" checked="checked" />&nbsp;Draw Polygons</label>
-        <label><input type="radio" name="draw" id="links" />&nbsp;Draw Links</label>
-        <label><input type="radio" name="draw" id="delete" />&nbsp;Delete Elements</label>
+        <div class="controls">
+            <input type="file" id="file" />
+        </div>
+        <div class="controls">
+            <button id="render">Render Navigation Map</button>
+            <button id="reset">Reset</button>
+        </div>
+        <div class="controls">
+            <label><input type="radio" name="draw" id="polygons" checked="checked" />&nbsp;Draw Polygons</label>
+            <label><input type="radio" name="draw" id="links" />&nbsp;Draw Links</label>
+            <label><input type="radio" name="draw" id="delete" />&nbsp;Delete Elements</label>
+        </div>
     </div>
 
     <script src="vector2.js"></script>
