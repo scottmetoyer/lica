@@ -136,8 +136,28 @@ var Meshmaker = (function () {
         var position = getCursorPosition(event);
         var polygonClick = document.getElementById('polygons').checked;
         var linkClick = document.getElementById('links').checked;
+        var deleteClick = document.getElementById('delete').checked;
 
-        // Check if over a drag handle
+        // Handle deletes
+        if (deleteClick) {
+            var index = -1;
+
+            for (var x = 0; x < polygons.length; x++) {
+                if (Polygon.checkPointInPolygon(polygons[x].vertices, position)) {
+                    polygons.splice(x, 1);
+                    return;
+                }
+            }
+
+            for (var x = 0; x < links.length; x++) {
+                if (checkHit(position, links[x])) {
+                    links.splice(x, 1);
+                    return;
+                }
+            }
+        }
+
+        // Handle polygon handle drags
         for (var x = 0; x < polygons.length; x++) {
             var polygon = polygons[x];
 
@@ -149,7 +169,7 @@ var Meshmaker = (function () {
             }
         }
 
-        // Check if over a link
+        // Handle link drags
         for (var x = 0; x < links.length; x++) {
             var link = links[x];
             if (checkHit(position, link)) {
@@ -157,6 +177,7 @@ var Meshmaker = (function () {
             }
         }
 
+        // Otherwise, drop a polygon or link
         if (image && !draggingVertex && !draggingLink) {
             if (polygonClick) {
                 dropPolygon(position);
