@@ -13,6 +13,11 @@ var Meshmaker = (function () {
         loop();
     }
 
+    function handleMeshRender() {
+        var textarea = document.getElementById('renderOutput');
+        textarea.value = JSON.stringify({ polygons: polygons, links: links });        
+    }
+
     function handleFileSelect(event) {
         var file = event.target.files[0];
 
@@ -257,6 +262,7 @@ var Meshmaker = (function () {
     }
 
     return {
+        handleMeshRender: handleMeshRender,
         handleFileSelect: handleFileSelect,
         handleMouseMove: handleMouseMove,
         handleCanvasReset: clearCanvas,

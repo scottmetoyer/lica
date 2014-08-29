@@ -35,6 +35,11 @@ button {
     padding: 4px;
 }
 
+ textarea {
+     width: 500px;
+     height: 200px;
+ }
+
 label {
     margin: 5px;
     font-size: 13px;

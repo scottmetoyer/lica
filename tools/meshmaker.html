@@ -19,13 +19,16 @@
             <input type="file" id="file" />
         </div>
         <div class="controls">
+            <label><input type="radio" name="draw" id="polygons" checked="checked" />&nbsp;Draw Polygons</label>
+            <label><input type="radio" name="draw" id="links" />&nbsp;Draw Links</label>
+            <label><input type="radio" name="draw" id="delete" />&nbsp;Delete Elements</label>
+        </div>
+        <div class="controls">
             <button id="render">Render Navigation Map</button>
             <button id="reset">Reset</button>
         </div>
         <div class="controls">
-            <label><input type="radio" name="draw" id="polygons" checked="checked" />&nbsp;Draw Polygons</label>
-            <label><input type="radio" name="draw" id="links" />&nbsp;Draw Links</label>
-            <label><input type="radio" name="draw" id="delete" />&nbsp;Delete Elements</label>
+            <textarea id="renderOutput" onclick="this.select()"></textarea>
         </div>
     </div>
 
