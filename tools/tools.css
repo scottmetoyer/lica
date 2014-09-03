@@ -66,3 +66,7 @@ input[type=text] {
     margin-bottom: 10px;
     font-size: 13px;
 }
+
+canvas {
+    background-color: #ececec;
+}
