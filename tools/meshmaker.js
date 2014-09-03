@@ -1,4 +1,6 @@
 var Meshmaker = (function () {
+    "use strict";
+
     const diameter = 10;
     var canvas = document.getElementById('canvas');
     var context = canvas.getContext('2d');
@@ -120,6 +122,7 @@ var Meshmaker = (function () {
     function clearCanvas() {
         polygons = [];
         links = [];
+        document.getElementById('renderOutput').value = '';
     }
 
     function getCursorPosition(event) {
