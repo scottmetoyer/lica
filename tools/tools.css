@@ -35,10 +35,10 @@ button {
     padding: 4px;
 }
 
- textarea {
-     width: 500px;
-     height: 200px;
- }
+textarea {
+    width: 500px;
+    height: 200px;
+}
 
 label {
     margin: 5px;
@@ -60,6 +60,8 @@ input[type=text] {
 #errorMessage {
     color: #ff0000;
     margin-bottom: 10px;
+    margin-top: 10px;
+    font-size: 13px;
 }
 
 #fileName {

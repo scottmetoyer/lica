@@ -2,16 +2,44 @@ var Engine = (function () {
     "use strict";
 
     var sprite;
+    var currentScene = null;
+    var sceneFilename = null;
 
     // Native resolution is 1280 x 720, 16 x 9 aspect ratio
     var nativeWidth = 1280;
     var widthToHeight = 16 / 9;
     var scale = 1.0;
 
-    function loadScene() {
+    function getCurrentScene() {
+        return currentScene;
+    }
+
+    function setCurrentScene(scene) {
+        currentScene = scene;
+    }
+
+    function loadScene(filename) {
+        // First, unload the existing scene
+        if (currentScene) {
+            unloadScene(sceneFilename);
+        }
+
+        var script = document.createElement('script')
+        script.setAttribute("type", "text/javascript")
+        script.setAttribute("src", filename)
+        document.getElementsByTagName("head")[0].appendChild(script);
+
         // Set the background image
-        var canvas = document.getElementById('canvas');
-        canvas.style.backgroundImage = "url('assets/scenes/scene1.png')";
+        // var canvas = document.getElementById('canvas');
+        // canvas.style.backgroundImage = "url('assets/scenes/scene1.png')";
+    }
+
+    function unloadScene(filename) {
+        var scripts = document.getElementsByTagName('script');
+        for (var i = scripts.length; i >= 0; i--) {
+            if (scripts[i] && scripts[i].getAttribute('src') != null && scripts[i].getAttribute('src').indexOf(filename) != -1)
+                scripts[i].parentNode.removeChild(scripts[i]);
+        }
     }
 
     function resize() {
@@ -113,7 +141,10 @@ var Engine = (function () {
     return {
         initialize: initialize,
         resize: resize,
-        handleClick: handleClick
+        handleClick: handleClick,
+        loadScene: loadScene,
+        getCurrentScene: getCurrentScene,
+        setCurrentScene: setCurrentScene
     };
 })();
 

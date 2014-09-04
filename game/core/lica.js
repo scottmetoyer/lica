@@ -1,11 +1,21 @@
 var Lica = (function () {
     "use strict";
 
-    function loadScene(name)
-    {
+    function loadScene(filename) {
+        Engine.loadScene(filename);
+    }
+
+    function getCurrentScene() {
+        return Engine.getCurrentScene();
+    }
+
+    function setCurrentScene(scene) {
+        Engine.setCurrentScene(scene);
     }
 
     return {
-        loadScene: loadScene
+        loadScene: loadScene,
+        getCurrentScene: getCurrentScene,
+        setCurrentScene: setCurrentScene
     };
 })();
