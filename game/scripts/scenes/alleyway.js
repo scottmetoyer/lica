@@ -1,27 +1,17 @@
 var Alleyway = (function (options) {
-    const name = 'Alleyway';
-    const background = 'alleyway.png';
-    const navmesh = {};
+    "use strict"
 
-    function getName() {
-        return name;
-    }
-
-    function getBackground() {
-        return background;
-    }
-
-    function getNavmesh() {
-        return navmesh;
-    }
+    var name = 'Alleyway';
+    var background = 'alleyway.png';
+    var navmesh = {};
 
     return {
-        getName: getName,
-        getBackground: getBackground,
-        getNavmesh: getNavmesh
+        name: function () { return name; },
+        background: function () { return background; },
+        navmesh: function () { return navmesh; }
     };
 })();
 
 if (Engine) {
-    Engine.setCurrentScene(Alleyway);
+    Engine.currentScene(Alleyway);
 }

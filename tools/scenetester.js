@@ -4,8 +4,10 @@ var Scenetester = (function () {
     var canvas = document.getElementById('canvas');
     var context = canvas.getContext('2d');
     var error = document.getElementById('errorMessage');
+    var sceneFilename = null;
 
     function initialize() {
+        Engine.initialize();
         loop();
     }
 
@@ -14,7 +16,13 @@ var Scenetester = (function () {
         var title = document.getElementById('filename');
 
         if (filename) {
-            Engine.loadScene('../game/scripts/scenes/' + filename);
+            if (sceneFilename) {
+                Scene.unload(sceneFilename);
+            }
+
+            filename = '../game/scripts/scenes/' + filename;
+            Scene.load(filename);
+            sceneFilename = filename;
         } else {
             error.innerText = 'Please specify a filename';
         }

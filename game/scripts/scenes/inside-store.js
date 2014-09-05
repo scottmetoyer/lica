@@ -1,27 +1,17 @@
 var InsideStore = (function (options) {
-    const name = 'Inside Store';
-    const background = 'inside-store.png';
-    const navmesh = {};
+    "use strict"
 
-    function getName() {
-        return name;
-    }
-
-    function getBackground() {
-        return background;
-    }
-
-    function getNavmesh() {
-        return navmesh;
-    }
+    var name = 'Inside Store';
+    var background = 'inside-store.png';
+    var navmesh = {};
 
     return {
-        getName: getName,
-        getBackground: getBackground,
-        getNavmesh: getNavmesh
+        name: function () { return name; },
+        background: function () { return background; },
+        navmesh: function () { return navmesh; }
     };
 })();
 
 if (Engine) {
-    Engine.setCurrentScene(InsideStore);
+    Engine.currentScene(InsideStore);
 }

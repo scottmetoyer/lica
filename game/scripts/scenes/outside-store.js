@@ -1,27 +1,17 @@
 var OutsideStore = (function (options) {
-    const name = 'Outside Store';
-    const background = 'outside-store.png';
-    const navmesh = {};
+    "use strict"
 
-    function getName() {
-        return name;
-    }
-
-    function getBackground() {
-        return background;
-    }
-
-    function getNavmesh() {
-        return navmesh;
-    }
+    var name = 'Outside Store';
+    var background = 'outside-store.png';
+    var navmesh = {};
 
     return {
-        getName: getName,
-        getBackground: getBackground,
-        getNavmesh: getNavmesh
+        name: function () { return name; },
+        background: function () { return background; },
+        navmesh: function () { return navmesh; }
     };
 })();
 
 if (Engine) {
-    Engine.setCurrentScene(OutsideStore);
+    Engine.currentScene(OutsideStore);
 }
