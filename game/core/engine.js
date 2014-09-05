@@ -24,14 +24,18 @@ var Engine = (function () {
             unloadScene(sceneFilename);
         }
 
-        var script = document.createElement('script')
-        script.setAttribute("type", "text/javascript")
-        script.setAttribute("src", filename)
+        var script = document.createElement('script');
+        script.setAttribute("type", "text/javascript");
+        script.setAttribute("src", filename);
+        script.async = false;
+        script.onload = function () {
+            // Set the background image
+            var canvas = document.getElementById('canvas');
+            canvas.style.backgroundImage = "url('../game/assets/scenes/" + currentScene.getBackground() + "')";
+            canvas.width = nativeWidth;
+            canvas.height = nativeWidth / widthToHeight;
+        };
         document.getElementsByTagName("head")[0].appendChild(script);
-
-        // Set the background image
-        // var canvas = document.getElementById('canvas');
-        // canvas.style.backgroundImage = "url('assets/scenes/scene1.png')";
     }
 
     function unloadScene(filename) {
@@ -74,6 +78,7 @@ var Engine = (function () {
 
     function initialize() {
         // Test load a scene
+        /*
         loadScene();
 
         var image = new Image();
@@ -99,7 +104,7 @@ var Engine = (function () {
             resize();
         };
 
-        loop();
+        loop();*/
     }
 
     function loop() {

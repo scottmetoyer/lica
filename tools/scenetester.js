@@ -3,7 +3,7 @@ var Scenetester = (function () {
 
     var canvas = document.getElementById('canvas');
     var context = canvas.getContext('2d');
-    var message = document.getElementById('errorMessage');
+    var error = document.getElementById('errorMessage');
 
     function initialize() {
         loop();
@@ -11,11 +11,12 @@ var Scenetester = (function () {
 
     function handleLoadScene(event) {
         var filename = document.getElementById('sceneFilename').value;
+        var title = document.getElementById('filename');
 
         if (filename) {
             Engine.loadScene('../game/scripts/scenes/' + filename);
         } else {
-            message.innerText = 'Please specify a filename';
+            error.innerText = 'Please specify a filename';
         }
     }
 
@@ -23,7 +24,7 @@ var Scenetester = (function () {
         window.requestAnimationFrame(loop);
         context.clearRect(0, 0, canvas.clientWidth, canvas.clientHeight);
     }
-    sceneFilename
+    
     return {
         handleLoadScene: handleLoadScene,
         initialize: initialize

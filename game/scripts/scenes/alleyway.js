@@ -1,19 +1,27 @@
 var Alleyway = (function (options) {
-    const name = "Alleyway";
-
-    function hotspotClick(color) {
-
-    }
+    const name = 'Alleyway';
+    const background = 'alleyway.png';
+    const navmesh = {};
 
     function getName() {
         return name;
     }
 
+    function getBackground() {
+        return background;
+    }
+
+    function getNavmesh() {
+        return navmesh;
+    }
+
     return {
-        hotspotClick: hotspotClick,
-        getName: getName
+        getName: getName,
+        getBackground: getBackground,
+        getNavmesh: getNavmesh
     };
 })();
 
-// Set the current scene to this scene
-Engine.setCurrentScene(Alleyway);
+if (Engine) {
+    Engine.setCurrentScene(Alleyway);
+}
