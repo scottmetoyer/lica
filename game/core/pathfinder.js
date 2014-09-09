@@ -19,6 +19,7 @@ var Pathfinder = (function (options) {
                 if (Polygon.checkIntersect(link, diameter, polygon) == true) {
                     // Link is in this polygon. Check to see if it is already accounted for.
                   
+
                 }
             }
         }
