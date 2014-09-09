@@ -1,7 +1,7 @@
 var Meshmaker = (function () {
     "use strict";
 
-    const diameter = 10;
+    var diameter = 10;
     var canvas = document.getElementById('canvas');
     var context = canvas.getContext('2d');
     var polygons = [];
@@ -236,22 +236,7 @@ var Meshmaker = (function () {
             var intersects = false;
 
             for (var x = 0; x < polygons.length; x++) {
-                var polygon = polygons[x];
-
-                // Check the circle center point for collision
-                if (Polygon.checkPointInPolygon(polygon.vertices, links[i])) {
-                    intersects = true;
-                }
-
-                // Check the first three lines of the polygon
-                for (var y = 0; y < 3; y++) {
-                    if (Polygon.checkLineCollision(polygon.vertices[y], polygon.vertices[y + 1], links[i], diameter) == true) {
-                        intersects = true;
-                    }
-                }
-
-                // Check the last line of the polygon
-                if (Polygon.checkLineCollision(polygon.vertices[3], polygon.vertices[0], links[i], diameter) == true) {
+                if (Polygon.checkIntersect(links[i], diameter, polygons[x]) == true) {
                     intersects = true;
                 }
             }

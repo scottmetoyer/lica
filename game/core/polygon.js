@@ -43,6 +43,29 @@ var Polygon = (function () {
         return intersects;
     }
 
+    function checkIntersect(point, diameter, polygon) {
+        var intersects = false;
+
+        // Check the circle center point for collision
+        if (Polygon.checkPointInPolygon(polygon.vertices, point)) {
+            intersects = true;
+        }
+
+        // Check the first three lines of the polygon
+        for (var y = 0; y < 3; y++) {
+            if (Polygon.checkLineCollision(polygon.vertices[y], polygon.vertices[y + 1], point, diameter) == true) {
+                intersects = true;
+            }
+        }
+
+        // Check the last line of the polygon
+        if (Polygon.checkLineCollision(polygon.vertices[3], polygon.vertices[0], point, diameter) == true) {
+            intersects = true;
+        }
+
+        return intersects;
+    }
+
     function isConcave(vertices) {
         var positive = 0;
         var negative = 0;
@@ -112,6 +135,7 @@ var Polygon = (function () {
         isConcave: isConcave,
         computeCentroid: computeCentroid,
         checkPointInPolygon: checkPointInPolygon,
-        checkLineCollision: checkLineCollision
+        checkLineCollision: checkLineCollision,
+        checkIntersect: checkIntersect
     };
 })();

@@ -37,42 +37,13 @@ var Engine = (function () {
         // Compute global scale based on new width and apply to game objects
         scale = newWidth / nativeWidth;
 
-        sprite.setScale(scale);
+        // sprite.setScale(scale);
     }
 
     function initialize() {
-        var canvas = document.getElementById('canvas');
-        canvas.width = nativeWidth;
-        canvas.height = nativeWidth / widthToHeight;
-
-        // Test load a scene
-        /*
-        loadScene();
-
-        var image = new Image();
-        image.src = "assets/actors/hero.png";
-
-        image.onload = function () {
-            var canvas = document.getElementById('canvas');
-            var context = canvas.getContext('2d');
-
-            sprite = Sprite({
-                context: context,
-                spriteSheet: image,
-                width: 262,
-                height: 513,
-                interval: 120,
-                numberOfFrames: 8,
-                scale: scale,
-                loop: true,
-                position: { X: 0, Y: 0 }
-            });
-
-            // Resize the screen to fit the viewport
-            resize();
-        };
-
-        loop();*/
+        Scene.load("scripts/scenes/inside-store.js");
+        resize();
+        loop();
     }
 
     function loop() {
@@ -95,10 +66,6 @@ var Engine = (function () {
 
         debug('x: ' + x + ', y: ' + y + ', scl: ' + scale);
 
-        if (sprite) {
-            sprite.setPosition({ X: x, Y: y });
-        }
-
         event.preventDefault();
     }
 
@@ -115,7 +82,6 @@ var Engine = (function () {
         initialize: initialize,
         resize: resize,
         handleClick: handleClick,
-        loadScene: loadScene,
         currentScene: function (x) {
             if (x) { currentScene = x; }
             return currentScene;
@@ -123,12 +89,10 @@ var Engine = (function () {
     };
 })();
 
-function start() {
-    window.addEventListener('load', Engine.initialize, false);
-    window.addEventListener('resize', Engine.resize, false);
-    window.addEventListener('orientationchange', Engine.resize, false);
+window.addEventListener('load', Engine.initialize, false);
+window.addEventListener('resize', Engine.resize, false);
+window.addEventListener('orientationchange', Engine.resize, false);
 
-    // Bind canvas click events
-    var canvas = document.getElementById('canvas');
-    canvas.addEventListener('click', Engine.handleClick, false);
-}
+// Bind canvas click events
+var canvas = document.getElementById('canvas');
+canvas.addEventListener('click', Engine.handleClick, false);
