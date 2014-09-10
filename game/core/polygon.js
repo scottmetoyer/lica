@@ -47,19 +47,19 @@ var Polygon = (function () {
         var intersects = false;
 
         // Check the circle center point for collision
-        if (Polygon.checkPointInPolygon(polygon.vertices, point)) {
+        if (checkPointInPolygon(polygon.vertices, point)) {
             intersects = true;
         }
 
         // Check the first three lines of the polygon
         for (var y = 0; y < 3; y++) {
-            if (Polygon.checkLineCollision(polygon.vertices[y], polygon.vertices[y + 1], point, diameter) == true) {
+            if (checkLineCollision(polygon.vertices[y], polygon.vertices[y + 1], point, diameter) == true) {
                 intersects = true;
             }
         }
 
         // Check the last line of the polygon
-        if (Polygon.checkLineCollision(polygon.vertices[3], polygon.vertices[0], point, diameter) == true) {
+        if (checkLineCollision(polygon.vertices[3], polygon.vertices[0], point, diameter) == true) {
             intersects = true;
         }
 
@@ -134,8 +134,6 @@ var Polygon = (function () {
     return {
         isConcave: isConcave,
         computeCentroid: computeCentroid,
-        checkPointInPolygon: checkPointInPolygon,
-        checkLineCollision: checkLineCollision,
         checkIntersect: checkIntersect
     };
 })();
