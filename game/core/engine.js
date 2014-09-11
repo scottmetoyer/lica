@@ -4,10 +4,6 @@ var Engine = (function () {
     var sprite;
     var currentScene = null;
     var sceneFilename = null;
-
-    // Native resolution is 1280 x 720, 16 x 9 aspect ratio
-    var nativeWidth = 1280;
-    var widthToHeight = 16 / 9;
     var scale = 1.0;
 
     function resize() {
@@ -17,12 +13,12 @@ var Engine = (function () {
         var newHeight = window.innerHeight;
         var newWidthToHeight = newWidth / newHeight;
 
-        if (newWidthToHeight > widthToHeight) {
-            newWidth = newHeight * widthToHeight;
+        if (newWidthToHeight > Game.widthToHeight()) {
+            newWidth = newHeight * Game.widthToHeight();
             content.style.height = newHeight + 'px';
             content.style.width = newWidth + 'px';
         } else {
-            newHeight = newWidth / widthToHeight;
+            newHeight = newWidth / Game.widthToHeight();
             content.style.width = newWidth + 'px';
             content.style.height = newHeight + 'px';
         }
@@ -35,12 +31,20 @@ var Engine = (function () {
         canvas.height = newHeight;
 
         // Compute global scale based on new width and apply to game objects
-        scale = newWidth / nativeWidth;
+        scale = newWidth / Game.nativeWidth();
 
         // sprite.setScale(scale);
     }
 
     function initialize() {
+        var canvas = document.getElementById('canvas');
+
+        // Bind events and setup the game
+        window.addEventListener('load', Engine.initialize, false);
+        window.addEventListener('resize', Engine.resize, false);
+        window.addEventListener('orientationchange', Engine.resize, false);
+        canvas.addEventListener('click', Engine.handleClick, false);
+
         Scene.load("scripts/scenes/inside-store.js");
         resize();
         loop();
@@ -88,10 +92,3 @@ var Engine = (function () {
         }
     };
 })();
-
-window.addEventListener('resize', Engine.resize, false);
-window.addEventListener('orientationchange', Engine.resize, false);
-
-// Bind canvas click events
-var canvas = document.getElementById('canvas');
-canvas.addEventListener('click', Engine.handleClick, false);

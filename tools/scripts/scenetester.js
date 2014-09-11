@@ -7,12 +7,11 @@ var Scenetester = (function () {
     var sceneFilename = null;
 
     function initialize() {
-        loop();
+        // loop();
     }
 
     function handleLoadScene(event) {
         var filename = document.getElementById('sceneFilename').value;
-        var title = document.getElementById('filename');
 
         if (filename) {
             if (sceneFilename) {
@@ -20,7 +19,23 @@ var Scenetester = (function () {
             }
 
             filename = '../game/scripts/scenes/' + filename;
-            Scene.load(filename);
+            Scene.load({
+                filename: filename,
+                done: function () {
+                    // Set the background image
+                    var canvas = document.getElementById('canvas');
+                    canvas.style.backgroundImage = "url('../game/assets/scenes/" + Engine.currentScene().background() + "')";
+
+                    // Set the canvas width
+                    canvas.width = Game.nativeWidth();
+                    canvas.height = Game.nativeWidth() / Game.widthToHeight();
+
+                    // Set the scene title
+                    var title = document.getElementById('fileName');
+                    title.innerText = Engine.currentScene().name();
+                }
+            });
+
             sceneFilename = filename;
         } else {
             error.innerText = 'Please specify a filename';

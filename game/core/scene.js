@@ -1,15 +1,13 @@
 var Scene = (function () {
     var canvas = document.getElementById('canvas');
 
-    function load(filename) {
+    function load(parameters) {
         var script = document.createElement('script');
         script.setAttribute("type", "text/javascript");
-        script.setAttribute("src", filename);
+        script.setAttribute("src", parameters.filename);
         script.async = false;
         script.onload = function () {
-            // Set the background image
-            var canvas = document.getElementById('canvas');
-            canvas.style.backgroundImage = "url('../game/assets/scenes/" + Engine.currentScene().background() + "')";
+            parameters.done(this);
         };
 
         document.getElementsByTagName("head")[0].appendChild(script);
