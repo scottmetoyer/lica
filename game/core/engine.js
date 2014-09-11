@@ -89,7 +89,6 @@ var Engine = (function () {
     };
 })();
 
-window.addEventListener('load', Engine.initialize, false);
 window.addEventListener('resize', Engine.resize, false);
 window.addEventListener('orientationchange', Engine.resize, false);
 

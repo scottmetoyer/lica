@@ -7,7 +7,6 @@ var Scenetester = (function () {
     var sceneFilename = null;
 
     function initialize() {
-        Engine.initialize();
         loop();
     }
 
