@@ -9,6 +9,9 @@ var Scene = (function () {
         script.onload = function () {
             parameters.done(this);
         };
+        script.onerror = function () {
+            parameters.error();
+        };
 
         document.getElementsByTagName("head")[0].appendChild(script);
     }
