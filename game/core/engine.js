@@ -4,6 +4,7 @@ var Engine = (function () {
     var sprite;
     var currentScene = null;
     var sceneFilename = null;
+    var hero = null;
     var scale = 1.0;
 
     function resize() {
