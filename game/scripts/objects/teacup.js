@@ -1,7 +1,7 @@
-var Hero = (function (options) {
+var Teacup = (function (options) {
     "use strict"
 
-    var name = 'Hero';
+    var name = 'Teacup';
     var spritesheet = 'hero.png';
 
     return {

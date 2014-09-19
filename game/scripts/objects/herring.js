@@ -1,8 +1,8 @@
-var Hero = (function (options) {
+var Herring = (function (options) {
     "use strict"
 
-    var name = 'Hero';
-    var spritesheet = 'hero.png';
+    var name = 'Red Herring';
+    var spritesheet = 'herring.png';
 
     return {
         name: function () { return name; },

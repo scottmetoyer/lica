@@ -3,7 +3,6 @@ var Engine = (function () {
 
     var sprite;
     var currentScene = null;
-    var sceneFilename = null;
     var hero = null;
     var scale = 1.0;
 
@@ -46,9 +45,9 @@ var Engine = (function () {
         window.addEventListener('orientationchange', Engine.resize, false);
         canvas.addEventListener('click', Engine.handleClick, false);
 
-        Scene.load("scripts/scenes/inside-store.js");
-        resize();
-        loop();
+        // Scriptloader.load("scripts/scenes/inside-store.js");
+        // resize();
+        // loop();
     }
 
     function loop() {

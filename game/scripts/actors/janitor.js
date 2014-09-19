@@ -1,8 +1,8 @@
-var Hero = (function (options) {
+var Janitor = (function (options) {
     "use strict"
 
-    var name = 'Hero';
-    var spritesheet = 'hero.png';
+    var name = 'Janitor';
+    var spritesheet = 'janitor.png';
 
     return {
         name: function () { return name; },

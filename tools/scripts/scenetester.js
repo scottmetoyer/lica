@@ -5,6 +5,7 @@ var Scenetester = (function () {
     var context = canvas.getContext('2d');
     var error = document.getElementById('errorMessage');
     var sceneFilename = null;
+    var currentSceneScriptId = null;
     var showNavmesh = true;
     var showActors = true;
     var showObjects = true;
@@ -17,17 +18,17 @@ var Scenetester = (function () {
         var filename = document.getElementById('sceneFilename').value;
 
         if (filename) {
-            if (sceneFilename) {
-                Scene.unload(sceneFilename);
+            if (currentSceneScriptId) {
+                Scriptloader.unload(currentSceneScriptId);
             }
 
             filename = '../game/scripts/scenes/' + filename;
 
             try
             {
-                Scene.load({
+                Scriptloader.load({
                     filename: filename,
-                    done: function () {
+                    done: function (sceneGuid) {
                         // Set the background image
                         var canvas = document.getElementById('canvas');
                         canvas.style.backgroundImage = "url('../game/assets/scenes/" + Engine.currentScene().background() + "')";
@@ -40,6 +41,8 @@ var Scenetester = (function () {
                         var title = document.getElementById('fileName');
                         title.innerText = Engine.currentScene().name();
                         error.innerText = "";
+
+                        currentSceneScriptId = sceneGuid;
                     },
                     error: function () {
                         error.innerText = "Cannot load the requested file";
@@ -49,8 +52,6 @@ var Scenetester = (function () {
             catch (err) {
                 error.innerText = err;
             }
-
-            sceneFilename = filename;
         } else {
             error.innerText = 'Please specify a filename';
         }
