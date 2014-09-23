@@ -1,14 +1,14 @@
-var Sprite = (function (options) {
+var Sprite = (function (parameters) {
     "use strict";
 
-    var context = options.context;
-    var spriteSheet = options.spriteSheet;
-    var width = options.width;
-    var height = options.height;
-    var interval = options.interval;
-    var numberOfFrames = options.numberOfFrames;
-    var scale = options.scale;
-    var loop = options.loop;
+    var context = parameters.context;
+    var spriteSheet = parameters.spriteSheet;
+    var width = parameters.width;
+    var height = parameters.height;
+    var interval = parameters.interval;
+    var numberOfFrames = parameters.numberOfFrames;
+    var scale = parameters.scale;
+    var loop = parameters.loop;
     var position = { X: 0, Y: 0 };
 
     var lastUpdate = Date.now();
