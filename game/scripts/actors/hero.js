@@ -1,4 +1,4 @@
-var Hero = (function (options) {
+var Hero = (function (parameters) {
     "use strict"
 
     var name = 'Hero';

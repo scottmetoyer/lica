@@ -1,4 +1,4 @@
-var Janitor = (function (options) {
+var Janitor = (function (parameters) {
     "use strict"
 
     var name = 'Janitor';

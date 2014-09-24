@@ -10,6 +10,7 @@ var Sprite = (function (parameters) {
     var scale = parameters.scale;
     var loop = parameters.loop;
     var position = { X: 0, Y: 0 };
+    var animationIndex = 0;
 
     var lastUpdate = Date.now();
     var frameIndex = 0;
@@ -43,7 +44,7 @@ var Sprite = (function (parameters) {
         context.drawImage(
            spriteSheet,
            frameIndex * width,
-           0,
+           animationIndex,
            width,
            height,
            pos.X,
@@ -60,16 +61,24 @@ var Sprite = (function (parameters) {
         if (elapsed >= interval) {
             frameIndex++;
 
-            if (frameIndex >= numberOfFrames) {
+            if (frameIndex >= numberOfFrames[animationIndex]) {
                 if (loop) {
                     frameIndex = 0;
                 } else {
-                    frameIndex = numberOfFrames - 1;
+                    frameIndex = numberOfFrames[animationIndex] - 1;
                 }
             }
 
             lastUpdate = gameTime;
         }
+    }
+
+    function getAnimationIndex() {
+        return animationIndex;
+    }
+
+    function setAnimationIndex(value) {
+        animationIndex = value;
     }
 
     return {
@@ -78,6 +87,8 @@ var Sprite = (function (parameters) {
         getScale: getScale,
         setScale: setScale,
         setPosition: setPosition,
-        getPosition: getPosition
+        getPosition: getPosition,
+        setAnimationIndex: setAnimationIndex,
+        getAnimationIndex: getAnimationIndex
     };
 });
