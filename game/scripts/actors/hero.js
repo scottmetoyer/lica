@@ -8,6 +8,13 @@ var Hero = (function (parameters) {
     return {
         name: function () { return name; },
         spritesheet: function () { return spritesheet; },
-        position: parent.position
+        position: parent.position,
+        update: parent.update,
+        draw: parent.draw
     };
 })();
+
+if (Engine) {
+    Engine.hero(Hero);
+    Engine.addGameObject(Hero);
+}

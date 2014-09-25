@@ -2,8 +2,9 @@ var Actor = (function (parameters) {
     var state = "IDLE";
     var facing = "DOWN";
     var sprite;
-    
-    var position = new Vector2(0, 0);
+    var zindex = 0;
+
+    var currentPosition = new Vector2(0, 0);
 
     // Parameters:
     // position: The Vector2 screen position to walk to
@@ -22,16 +23,14 @@ var Actor = (function (parameters) {
     // value: A Vector2 position value
     function position(value) {
         if (value) {
-            position = value;
+            currentPosition = value;
         }
 
-        alert("Clciked the nav map!");
-
-        return position;
+        return currentPosition;
     }
 
     // Parameters:
-    function update(parameters) {
+    function update(gameTime) {
         switch (state) {
             case "IDLE":
                 break;
@@ -47,11 +46,14 @@ var Actor = (function (parameters) {
         }
     }
 
+    function draw() {
+    }
 
     return {
         walkTo: walkTo,
         playAnimation: playAnimation,
         position: position,
-        update: update
+        update: update,
+        draw: draw
     }
 });

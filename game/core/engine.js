@@ -5,6 +5,7 @@ var Engine = (function () {
     var currentScene = null;
     var currentSceneScriptId = null;
     var hero = null;
+    var gameObjects = [];
     var currentAction = "WALK";
     var scale = 1.0;
 
@@ -61,28 +62,29 @@ var Engine = (function () {
         window.addEventListener('orientationchange', Engine.resize, false);
         canvas.addEventListener('click', Engine.handleClick, false);
 
+        // Load the first game scene
         loadScene(Game.startScene());
 
-        // Load the hero script
+        // Load the hero
         Scriptloader.load({ filename: Game.heroScript() });
 
+        // Start the main game loop
         loop();
     }
 
     function loop() {
         window.requestAnimationFrame(loop);
 
-        // Update and game objects
-        if (sprite) {
-            sprite.update(Date.now());
-            sprite.draw();
+        // Update and draw game objects
+        for (var i = 0; i < gameObjects.length; i++) {
+            gameObjects[i].update(Date.now());
+            gameObjects[i].draw();
         }
     }
 
     function handleInterfaceClick(point) {
         var handled = false;
         return handled;
-
     }
 
     function handleObjectClick(point) {
@@ -94,7 +96,8 @@ var Engine = (function () {
         var handled = false;
 
         if (currentAction == "WALK") {
-            hero.setPosition(point);
+            // TODO: Create a pathfinder and navigate hero to the destination
+            hero.position(point);
         }
 
         return handled;
@@ -133,10 +136,33 @@ var Engine = (function () {
         context.fillText(message, 10, 20);
     }
 
+    function addGameObject(object) {
+        gameObjects.push(object);
+    }
+
+    function clearGameObjects() {
+        gameObjects = [];
+    }
+
+    function removeGameObject(name) {
+        for (var i = 0; i < gameObjects.length; i++) {
+            if (gameObjects[i].name == name) {
+                gameObjects.splice(i, 1);
+            }
+        }
+    }
+
     return {
         initialize: initialize,
         resize: resize,
         handleClick: handleClick,
+        addGameObject: addGameObject,
+        removeGameObject: removeGameObject,
+        clearGameObjects: clearGameObjects,
+        hero: function (value) {
+            if (value) { hero = value; }
+            return value;
+        },
         currentScene: function (x) {
             if (x) { currentScene = x; }
             return currentScene;
