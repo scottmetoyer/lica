@@ -3,9 +3,11 @@ var Hero = (function (parameters) {
 
     var name = 'Hero';
     var spritesheet = 'hero.png';
+    var parent = new Actor();
 
     return {
         name: function () { return name; },
-        spritesheet: function () { return spritesheet; }
+        spritesheet: function () { return spritesheet; },
+        position: parent.position
     };
 })();

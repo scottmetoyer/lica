@@ -3,8 +3,16 @@ var Scriptloader = (function () {
 
     var loadedScriptIds = [];
 
+    function getGuid() {
+        function _p8(s) {
+            var p = (Math.random().toString(16) + "000000000").substr(2, 8);
+            return s ? "-" + p.substr(0, 4) + "-" + p.substr(4, 4) : p;
+        }
+        return _p8() + _p8(true) + _p8(true) + _p8();
+    }
+
     function load(parameters) {
-        var guid = guid();
+        var guid = getGuid();
         var script = document.createElement('script');
         script.setAttribute("type", "text/javascript");
         script.setAttribute("src", parameters.filename);
@@ -12,7 +20,10 @@ var Scriptloader = (function () {
         script.async = false;
         script.onload = function () {
             loadedScriptIds.push(guid);
-            parameters.done(guid);
+
+            if (parameters.done) {
+                parameters.done(guid);
+            }
         };
         script.onerror = function () {
             parameters.error();
@@ -37,13 +48,6 @@ var Scriptloader = (function () {
         for (var i = 0; i < loadedScriptIds.length; i++) {
             unload(loadedScriptIds[i]);
         }
-    }
-
-    function guid() {
-        'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-            var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
-            return v.toString(16);
-        });
     }
 
     return {

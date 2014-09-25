@@ -1,18 +1,8 @@
 var Actor = (function (parameters) {
     var state = "IDLE";
     var facing = "DOWN";
-
-    var sprite = new Sprite({
-        context: parameters.context,
-        spriteSheet: parameters.spriteSheet,
-        width: parameters.width,
-        height: parameters.height,
-        interval: parameters.interval,
-        numberOfFrames: parameters.numberOfFrames,
-        scale: parameters.scale,
-        loop: parameters.loop
-    });
-
+    var sprite;
+    
     var position = new Vector2(0, 0);
 
     // Parameters:
@@ -26,6 +16,18 @@ var Actor = (function (parameters) {
     // loop: Loop the animation? True or false.
     // done: Callback executed when the animation is done playing, or after one loop for looped animations
     function playAnimation(parameters) {
+    }
+
+    // Parameters:
+    // value: A Vector2 position value
+    function position(value) {
+        if (value) {
+            position = value;
+        }
+
+        alert("Clciked the nav map!");
+
+        return position;
     }
 
     // Parameters:
@@ -49,6 +51,7 @@ var Actor = (function (parameters) {
     return {
         walkTo: walkTo,
         playAnimation: playAnimation,
+        position: position,
         update: update
     }
 });

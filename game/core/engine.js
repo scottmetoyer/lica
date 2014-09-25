@@ -3,7 +3,9 @@ var Engine = (function () {
 
     var sprite;
     var currentScene = null;
+    var currentSceneScriptId = null;
     var hero = null;
+    var currentAction = "WALK";
     var scale = 1.0;
 
     function resize() {
@@ -36,6 +38,20 @@ var Engine = (function () {
         // sprite.setScale(scale);
     }
 
+    function loadScene(scene) {
+        // Load the start scene
+        Scriptloader.load({
+            filename: scene,
+            done: function (sceneGuid) {
+                // Set the background image
+                var canvas = document.getElementById('canvas');
+                canvas.style.backgroundImage = "url('assets/backgrounds/" + Engine.currentScene().background() + "')";
+                currentSceneScriptId = sceneGuid;
+                resize();
+            }
+        });
+    }
+
     function initialize() {
         var canvas = document.getElementById('canvas');
 
@@ -45,9 +61,12 @@ var Engine = (function () {
         window.addEventListener('orientationchange', Engine.resize, false);
         canvas.addEventListener('click', Engine.handleClick, false);
 
-        // Scriptloader.load("scripts/scenes/inside-store.js");
-        // resize();
-        // loop();
+        loadScene(Game.startScene());
+
+        // Load the hero script
+        Scriptloader.load({ filename: Game.heroScript() });
+
+        loop();
     }
 
     function loop() {
@@ -60,6 +79,27 @@ var Engine = (function () {
         }
     }
 
+    function handleInterfaceClick(point) {
+        var handled = false;
+        return handled;
+
+    }
+
+    function handleObjectClick(point) {
+        var handled = false;
+        return handled;
+    }
+
+    function handleNavmeshClick(point) {
+        var handled = false;
+
+        if (currentAction == "WALK") {
+            hero.setPosition(point);
+        }
+
+        return handled;
+    }
+
     function handleClick(event) {
         var x = event.layerX;
         var y = event.layerY;
@@ -67,10 +107,21 @@ var Engine = (function () {
         // Translate to game coordinates
         x = x / scale;
         y = y / scale;
+        var point = new Vector2(x, y);
 
-        debug('x: ' + x + ', y: ' + y + ', scl: ' + scale);
+        if (handleInterfaceClick(point)) {
+            event.preventDefault();
+            return;
+        }
 
-        event.preventDefault();
+        if (handleObjectClick(point)) {
+            event.preventDefault();
+            return;
+        }
+
+        if (handleNavmeshClick(point)) {
+            event.preventDefault();
+        }
     }
 
     function debug(message) {
