@@ -6,12 +6,12 @@
     <title>Lica</title>
     <link rel="stylesheet" type="text/css" href="core/lica.css" />
 </head>
-<body>
+<body onload="Engine.initialize()">
     <div id="content">
         <canvas id="canvas"></canvas>
     </div>
 
-    <script src="./scripts/game.js"></script>
+    <!-- Core scripts -->
     <script src="./core/vector2.js"></script>
     <script src="./core/polygon.js"></script>
     <script src="./core/sprite.js"></script>
@@ -19,8 +19,12 @@
     <script src="./core/scriptloader.js"></script>
     <script src="./core/engine.js"></script>
 
-    <script>
-        Engine.initialize();
-    </script>
+    <!-- Game scripts -->
+    <script src="./scripts/actors/hero.js"></script>
+    <script src="./scripts/actors/janitor.js"></script>
+    <script src="./scripts/scenes/inside-store.js"></script>
+    <script src="./scripts/scenes/alleyway.js"></script>
+    <script src="./scripts/scenes/outside-store.js"></script>
+    <script src="./scripts/game.js"></script>
 </body>
 </html>

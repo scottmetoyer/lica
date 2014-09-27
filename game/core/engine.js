@@ -3,9 +3,9 @@ var Engine = (function () {
 
     var sprite;
     var currentScene = null;
-    var currentSceneScriptId = null;
     var hero = null;
-    var gameObjects = [];
+    var objects = [];
+    var scenes = [];
     var currentAction = "WALK";
     var scale = 1.0;
 
@@ -35,22 +35,12 @@ var Engine = (function () {
 
         // Compute global scale based on new width and apply to game objects
         scale = newWidth / Game.nativeWidth();
-
-        // sprite.setScale(scale);
     }
 
     function loadScene(scene) {
-        // Load the start scene
-        Scriptloader.load({
-            filename: scene,
-            done: function (sceneGuid) {
-                // Set the background image
-                var canvas = document.getElementById('canvas');
-                canvas.style.backgroundImage = "url('assets/backgrounds/" + Engine.currentScene().background() + "')";
-                currentSceneScriptId = sceneGuid;
-                resize();
-            }
-        });
+        Engine.currentScene(scene);
+        canvas.style.backgroundImage = "url('assets/backgrounds/" + scene.background() + "')";
+        resize();
     }
 
     function initialize() {
@@ -65,9 +55,6 @@ var Engine = (function () {
         // Load the first game scene
         loadScene(Game.startScene());
 
-        // Load the hero
-        Scriptloader.load({ filename: Game.heroScript() });
-
         // Start the main game loop
         loop();
     }
@@ -76,9 +63,9 @@ var Engine = (function () {
         window.requestAnimationFrame(loop);
 
         // Update and draw game objects
-        for (var i = 0; i < gameObjects.length; i++) {
-            gameObjects[i].update(Date.now());
-            gameObjects[i].draw();
+        for (var i = 0; i < objects.length; i++) {
+            objects[i].update(Date.now());
+            objects[i].draw();
         }
     }
 
@@ -136,29 +123,20 @@ var Engine = (function () {
         context.fillText(message, 10, 20);
     }
 
-    function addGameObject(object) {
-        gameObjects.push(object);
+    function addObject(object) {
+        objects.push(object);
     }
 
-    function clearGameObjects() {
-        gameObjects = [];
-    }
-
-    function removeGameObject(name) {
-        for (var i = 0; i < gameObjects.length; i++) {
-            if (gameObjects[i].name == name) {
-                gameObjects.splice(i, 1);
-            }
-        }
+    function addScene(scene) {
+        scenes.push(scene);
     }
 
     return {
         initialize: initialize,
         resize: resize,
         handleClick: handleClick,
-        addGameObject: addGameObject,
-        removeGameObject: removeGameObject,
-        clearGameObjects: clearGameObjects,
+        addObject: addObject,
+        addScene: addScene,
         hero: function (value) {
             if (value) { hero = value; }
             return value;

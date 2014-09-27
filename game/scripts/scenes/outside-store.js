@@ -13,5 +13,5 @@ var OutsideStore = (function (options) {
 })();
 
 if (Engine) {
-    Engine.currentScene(OutsideStore);
+    Engine.addScene(OutsideStore);
 }

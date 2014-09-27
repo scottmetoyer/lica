@@ -40,5 +40,5 @@ var InsideStore = (function (options) {
 })();
 
 if (Engine) {
-    Engine.currentScene(InsideStore);
+    Engine.addScene(InsideStore);
 }

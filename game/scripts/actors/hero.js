@@ -16,5 +16,5 @@ var Hero = (function (parameters) {
 
 if (Engine) {
     Engine.hero(Hero);
-    Engine.addGameObject(Hero);
+    Engine.addObject(Hero);
 }

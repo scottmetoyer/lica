@@ -13,5 +13,5 @@ var Alleyway = (function (options) {
 })();
 
 if (Engine) {
-    Engine.currentScene(Alleyway);
+    Engine.addScene(Alleyway);
 }
