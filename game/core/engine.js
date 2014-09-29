@@ -1,7 +1,8 @@
 var Engine = (function () {
     "use strict";
 
-    var sprite;
+    var canvas = document.getElementById('canvas');
+    var context = canvas.getContext('2d');
     var currentScene = null;
     var hero = null;
     var objects = [];
@@ -44,8 +45,6 @@ var Engine = (function () {
     }
 
     function initialize() {
-        var canvas = document.getElementById('canvas');
-
         // Bind events and setup the game
         window.addEventListener('load', Engine.initialize, false);
         window.addEventListener('resize', Engine.resize, false);
@@ -115,8 +114,6 @@ var Engine = (function () {
     }
 
     function debug(message) {
-        var canvas = document.getElementById('canvas');
-        var context = canvas.getContext('2d');
         context.clearRect(0, 0, canvas.clientWidth, canvas.clientHeight);
         context.fillStyle = 'blue';
         context.font = 'bold 16px Arial';
@@ -144,6 +141,7 @@ var Engine = (function () {
         currentScene: function (x) {
             if (x) { currentScene = x; }
             return currentScene;
-        }
+        },
+        context: function () { return context; }
     };
 })();

@@ -2,13 +2,8 @@ var Actor = (function (parameters) {
     var state = "IDLE";
     var facing = "DOWN";
     var zindex = 0;
-    var height = parameters.height;
-    var width = parameters.width;
-    var spritesheet = parameters.spritesheet;
-    var sprite = new Sprite({
-
-    });
-
+    var sprite = parameters.sprite;
+    
     var currentPosition = new Vector2(0, 0);
 
 
@@ -53,6 +48,7 @@ var Actor = (function (parameters) {
     }
 
     function draw() {
+        sprite.draw();
     }
 
     return {

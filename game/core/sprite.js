@@ -1,7 +1,7 @@
 var Sprite = (function (parameters) {
     "use strict";
 
-    var context = parameters.context;
+    var context = Engine.context();
     var spriteSheet = parameters.spriteSheet;
     var width = parameters.width;
     var height = parameters.height;
@@ -14,6 +14,9 @@ var Sprite = (function (parameters) {
 
     var lastUpdate = Date.now();
     var frameIndex = 0;
+
+    var image = new Image();
+    image.src = './assets/spritesheets/' + spriteSheet;
 
     function getScale() {
         return scale;
@@ -42,7 +45,7 @@ var Sprite = (function (parameters) {
 
         // Draw the animation
         context.drawImage(
-           spriteSheet,
+           image,
            frameIndex * width,
            animationIndex,
            width,
