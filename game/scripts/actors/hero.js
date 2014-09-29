@@ -2,12 +2,14 @@ var Hero = (function (parameters) {
     "use strict"
 
     var name = 'Hero';
-    var spritesheet = 'hero.png';
-    var parent = new Actor();
+    var parent = new Actor({
+        spritesheet: 'hero.png',
+        height: 64,
+        width: 64
+    });
 
     return {
         name: function () { return name; },
-        spritesheet: function () { return spritesheet; },
         position: parent.position,
         update: parent.update,
         draw: parent.draw

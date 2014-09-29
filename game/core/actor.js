@@ -1,10 +1,16 @@
 var Actor = (function (parameters) {
     var state = "IDLE";
     var facing = "DOWN";
-    var sprite;
     var zindex = 0;
+    var height = parameters.height;
+    var width = parameters.width;
+    var spritesheet = parameters.spritesheet;
+    var sprite = new Sprite({
+
+    });
 
     var currentPosition = new Vector2(0, 0);
+
 
     // Parameters:
     // position: The Vector2 screen position to walk to
