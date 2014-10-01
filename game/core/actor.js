@@ -6,7 +6,6 @@ var Actor = (function (parameters) {
     
     var currentPosition = new Vector2(0, 0);
 
-
     // Parameters:
     // position: The Vector2 screen position to walk to
     // done: Callback executed after the actor reaches their destination
