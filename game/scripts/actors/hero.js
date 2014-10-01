@@ -20,7 +20,8 @@ var Hero = (function (parameters) {
         name: function () { return name; },
         position: parent.position,
         update: parent.update,
-        draw: parent.draw
+        draw: parent.draw,
+        scale: parent.scale
     };
 })();
 

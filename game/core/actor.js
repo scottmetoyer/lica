@@ -3,13 +3,13 @@ var Actor = (function (parameters) {
     var facing = "DOWN";
     var zindex = 0;
     var sprite = parameters.sprite;
-    
     var currentPosition = new Vector2(0, 0);
 
     // Parameters:
     // position: The Vector2 screen position to walk to
     // done: Callback executed after the actor reaches their destination
     function walkTo(parameters) {
+        state = "WALK";
     }
 
     // Parameters:
@@ -21,13 +21,7 @@ var Actor = (function (parameters) {
 
     // Parameters:
     // value: A Vector2 position value
-    function position(value) {
-        if (value) {
-            currentPosition = value;
-        }
-
-        return currentPosition;
-    }
+    
 
     // Parameters:
     function update(gameTime) {
@@ -53,8 +47,20 @@ var Actor = (function (parameters) {
     return {
         walkTo: walkTo,
         playAnimation: playAnimation,
-        position: position,
+        position: function (value) {
+            if (value) {
+                currentPosition = value;
+                sprite.position(currentPosition);
+            }
+            return currentPosition;
+        },
         update: update,
-        draw: draw
+        draw: draw,
+        scale: function (value) {
+            if (value) {
+                sprite.scale(value);
+            }
+            return sprite.scale;
+        }
     }
 });

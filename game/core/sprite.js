@@ -7,10 +7,10 @@ var Sprite = (function (parameters) {
     var height = parameters.height;
     var interval = parameters.interval;
     var numberOfFrames = parameters.numberOfFrames;
-    var scale = parameters.scale;
+    var currentScale = parameters.scale;
     var loop = parameters.loop;
-    var position = { X: 0, Y: 0 };
-    var animationIndex = 0;
+    var currentPosition = new Vector2(0, 0);
+    var currentAnimationIndex = 0;
 
     var lastUpdate = Date.now();
     var frameIndex = 0;
@@ -18,42 +18,25 @@ var Sprite = (function (parameters) {
     var image = new Image();
     image.src = './assets/spritesheets/' + spriteSheet;
 
-    function getScale() {
-        return scale;
-    }
-
-    function setScale(value) {
-        scale = value;
-    }
-
-    function getPosition() {
-        return position;
-    }
-
-    function setPosition(value) {
-        position = value;
-    }
-
     function getAbsolutePosition() {
-        return { X: position.X * scale, Y: position.Y * scale };
+        return new Vector2(currentPosition.x * currentScale, currentPosition.y * currentScale);
     }
 
     function draw() {
         var pos = getAbsolutePosition();
-
-        context.clearRect(pos.X, pos.Y, width * scale, height * scale);
+        context.clearRect(pos.x, pos.y, width * currentScale, height * currentScale);
 
         // Draw the animation
         context.drawImage(
            image,
            frameIndex * width,
-           animationIndex,
+           currentAnimationIndex,
            width,
            height,
-           pos.X,
-           pos.Y,
-           width * scale,
-           height * scale);
+           pos.x,
+           pos.y,
+           width * currentScale,
+           height * currentScale);
     }
 
     function update(gameTime) {
@@ -64,11 +47,11 @@ var Sprite = (function (parameters) {
         if (elapsed >= interval) {
             frameIndex++;
 
-            if (frameIndex >= numberOfFrames[animationIndex]) {
+            if (frameIndex >= numberOfFrames[currentAnimationIndex]) {
                 if (loop) {
                     frameIndex = 0;
                 } else {
-                    frameIndex = numberOfFrames[animationIndex] - 1;
+                    frameIndex = numberOfFrames[currentAnimationIndex] - 1;
                 }
             }
 
@@ -76,22 +59,26 @@ var Sprite = (function (parameters) {
         }
     }
 
-    function getAnimationIndex() {
-        return animationIndex;
-    }
-
-    function setAnimationIndex(value) {
-        animationIndex = value;
-    }
-
     return {
         draw: draw,
         update: update,
-        getScale: getScale,
-        setScale: setScale,
-        setPosition: setPosition,
-        getPosition: getPosition,
-        setAnimationIndex: setAnimationIndex,
-        getAnimationIndex: getAnimationIndex
+        scale: function(value) {
+            if (value) {
+                currentScale = value;
+            }
+            return currentScale;
+        },
+        position: function (value) {
+            if (value) {
+                currentPosition = value;
+            }
+            return currentPosition;
+        },
+        animationIndex: function (value) {
+            if (value) {
+                currentAnimationIndex = value;
+            }
+            return currentAnimationIndex;
+        }
     };
 });

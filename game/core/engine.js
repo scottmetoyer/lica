@@ -36,6 +36,10 @@ var Engine = (function () {
 
         // Compute global scale based on new width and apply to game objects
         scale = newWidth / Game.nativeWidth();
+
+        for (var i = 0; i < objects.length; i++) {
+            objects[i].scale(scale);
+        }
     }
 
     function loadScene(scene) {
@@ -84,6 +88,7 @@ var Engine = (function () {
         if (currentAction == "WALK") {
             // TODO: Create a pathfinder and navigate hero to the destination
             hero.position(point);
+            handled = true;
         }
 
         return handled;
