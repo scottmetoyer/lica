@@ -12,7 +12,6 @@ var Actor = (function (parameters) {
         if (theta < 0)
             theta += 2 * Math.PI;
         var angle = theta * 180 / Math.PI;
-        console.log(angle);
 
         if (angle >= 0 && angle < 45 || angle > 315 && angle <= 360) {
             facing = "EAST";
