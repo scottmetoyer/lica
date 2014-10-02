@@ -141,11 +141,11 @@ var Engine = (function () {
         addObject: addObject,
         addScene: addScene,
         hero: function (value) {
-            if (value) { hero = value; }
+            if (value != undefined) { hero = value; }
             return value;
         },
-        currentScene: function (x) {
-            if (x) { currentScene = x; }
+        currentScene: function (value) {
+            if (value != undefined) { currentScene = value; }
             return currentScene;
         },
         context: function () { return context; }

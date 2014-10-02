@@ -12,6 +12,6 @@ var Alleyway = (function (options) {
     };
 })();
 
-if (Engine) {
+if (Engine != undefined) {
     Engine.addScene(Alleyway);
 }

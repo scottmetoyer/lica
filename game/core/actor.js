@@ -12,19 +12,20 @@ var Actor = (function (parameters) {
         if (theta < 0)
             theta += 2 * Math.PI;
         var angle = theta * 180 / Math.PI;
+        console.log(angle);
 
         if (angle >= 0 && angle < 45 || angle > 315 && angle <= 360) {
             facing = "EAST";
             sprite.animationIndex(3);
         } else if (angle >= 45 && angle < 135) {
             facing = "SOUTH";
-            sprite.animationIndex(2);
+            sprite.animationIndex(0);
         } else if (angle >= 135 && angle < 225) {
             facing = "WEST";
             sprite.animationIndex(1);
         } else if (angle >= 225 && angle < 315) {
             facing = "NORTH";
-            sprite.animationIndex(0);
+            sprite.animationIndex(2);
         }
     }
 
@@ -68,7 +69,7 @@ var Actor = (function (parameters) {
         facePoint: facePoint,
         playAnimation: playAnimation,
         position: function (value) {
-            if (value) {
+            if (value != undefined) {
                 currentPosition = value;
                 sprite.position(currentPosition);
             }
@@ -77,7 +78,7 @@ var Actor = (function (parameters) {
         update: update,
         draw: draw,
         scale: function (value) {
-            if (value) {
+            if (value != undefined) {
                 sprite.scale(value);
             }
             return sprite.scale;

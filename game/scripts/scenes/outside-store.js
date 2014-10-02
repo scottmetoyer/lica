@@ -12,6 +12,6 @@ var OutsideStore = (function (options) {
     };
 })();
 
-if (Engine) {
+if (Engine != undefined) {
     Engine.addScene(OutsideStore);
 }

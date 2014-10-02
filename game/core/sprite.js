@@ -25,11 +25,16 @@ var Sprite = (function (parameters) {
         return pos;
     }
 
+    function clear() {
+        var pos = getDrawPosition();
+        context.clearRect(pos.x, pos.y, width * currentScale, height * currentScale);
+    }
+
     function draw() {
+        clear();
+
         // Offset to bottom middle of the sprite, scaled by current scale factor
         var pos = getDrawPosition();
-
-        context.clearRect(pos.x, pos.y, width * currentScale, height * currentScale);
 
         // Draw the animation
         context.drawImage(
@@ -68,19 +73,20 @@ var Sprite = (function (parameters) {
         draw: draw,
         update: update,
         scale: function(value) {
-            if (value) {
+            if (value != undefined) {
                 currentScale = value;
             }
             return currentScale;
         },
         position: function (value) {
-            if (value) {
+            if (value != undefined) {
+                clear();
                 currentPosition = value;
             }
             return currentPosition;
         },
         animationIndex: function (value) {
-            if (value) {
+            if (value != undefined) {
                 currentAnimationIndex = value;
             }
             return currentAnimationIndex;
