@@ -35,7 +35,7 @@ var Sprite = (function (parameters) {
         context.drawImage(
            image,
            frameIndex * width,
-           currentAnimationIndex,
+           currentAnimationIndex * height,
            width,
            height,
            pos.x,

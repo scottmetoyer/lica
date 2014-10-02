@@ -8,7 +8,10 @@ var Actor = (function (parameters) {
     // Parameters:
     // point: The Vector2 coordinates the actor will face
     function facePoint(point) {
-        var angle = Math.atan((point.y - currentPosition.y) / (point.x - currentPosition.x)) * 180 / Math.PI;
+        var theta = Math.atan2(point.y - currentPosition.y, point.x - currentPosition.x);
+        if (theta < 0)
+            theta += 2 * Math.PI;
+        var angle = theta * 180 / Math.PI;
 
         if (angle >= 0 && angle < 90) {
             facing = "EAST";
