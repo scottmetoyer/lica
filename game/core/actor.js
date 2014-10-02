@@ -13,17 +13,17 @@ var Actor = (function (parameters) {
             theta += 2 * Math.PI;
         var angle = theta * 180 / Math.PI;
 
-        if (angle >= 0 && angle < 90) {
+        if (angle >= 0 && angle < 45 || angle > 315 && angle <= 360) {
             facing = "EAST";
             sprite.animationIndex(3);
-        } else if (angle >= 90 && angle < 180) {
-            facing = "NORTH";
-            sprite.animationIndex(2);
-        } else if (angle >= 180 && angle < 270) {
-            facing = "EAST";
-            sprite.animationIndex(1);
-        } else if (angle >= 270 && angle < 360) {
+        } else if (angle >= 45 && angle < 135) {
             facing = "SOUTH";
+            sprite.animationIndex(2);
+        } else if (angle >= 135 && angle < 225) {
+            facing = "WEST";
+            sprite.animationIndex(1);
+        } else if (angle >= 225 && angle < 315) {
+            facing = "NORTH";
             sprite.animationIndex(0);
         }
     }
