@@ -18,12 +18,17 @@ var Sprite = (function (parameters) {
     var image = new Image();
     image.src = './assets/spritesheets/' + spriteSheet;
 
-    function getAbsolutePosition() {
-        return new Vector2(currentPosition.x * currentScale, currentPosition.y * currentScale);
+    function getDrawPosition() {
+        var pos = new Vector2(currentPosition.x * currentScale, currentPosition.y * currentScale);
+        pos.x = pos.x - ((width * currentScale) / 2);
+        pos.y = pos.y - (height * currentScale);
+        return pos;
     }
 
     function draw() {
-        var pos = getAbsolutePosition();
+        // Offset to bottom middle of the sprite, scaled by current scale factor
+        var pos = getDrawPosition();
+
         context.clearRect(pos.x, pos.y, width * currentScale, height * currentScale);
 
         // Draw the animation

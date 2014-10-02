@@ -87,6 +87,7 @@ var Engine = (function () {
 
         if (currentAction == "WALK") {
             // TODO: Create a pathfinder and navigate hero to the destination
+            hero.facePoint(point);
             hero.position(point);
             handled = true;
         }

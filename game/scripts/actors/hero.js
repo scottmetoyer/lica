@@ -21,7 +21,8 @@ var Hero = (function (parameters) {
         position: parent.position,
         update: parent.update,
         draw: parent.draw,
-        scale: parent.scale
+        scale: parent.scale,
+        facePoint: parent.facePoint
     };
 })();
 

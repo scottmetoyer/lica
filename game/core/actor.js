@@ -6,6 +6,26 @@ var Actor = (function (parameters) {
     var currentPosition = new Vector2(0, 0);
 
     // Parameters:
+    // point: The Vector2 coordinates the actor will face
+    function facePoint(point) {
+        var angle = Math.atan((point.y - currentPosition.y) / (point.x - currentPosition.x)) * 180 / Math.PI;
+
+        if (angle >= 0 && angle < 90) {
+            facing = "EAST";
+            sprite.animationIndex(3);
+        } else if (angle >= 90 && angle < 180) {
+            facing = "NORTH";
+            sprite.animationIndex(2);
+        } else if (angle >= 180 && angle < 270) {
+            facing = "EAST";
+            sprite.animationIndex(1);
+        } else if (angle >= 270 && angle < 360) {
+            facing = "SOUTH";
+            sprite.animationIndex(0);
+        }
+    }
+
+    // Parameters:
     // position: The Vector2 screen position to walk to
     // done: Callback executed after the actor reaches their destination
     function walkTo(parameters) {
@@ -18,10 +38,6 @@ var Actor = (function (parameters) {
     // done: Callback executed when the animation is done playing, or after one loop for looped animations
     function playAnimation(parameters) {
     }
-
-    // Parameters:
-    // value: A Vector2 position value
-    
 
     // Parameters:
     function update(gameTime) {
@@ -46,6 +62,7 @@ var Actor = (function (parameters) {
 
     return {
         walkTo: walkTo,
+        facePoint: facePoint,
         playAnimation: playAnimation,
         position: function (value) {
             if (value) {
