@@ -3,7 +3,11 @@ var Actor = (function (parameters) {
     var facing = "DOWN";
     var zindex = 0;
     var sprite = parameters.sprite;
+    var step = parameters.step;
     var currentPosition = new Vector2(0, 0);
+    var targetPosition = new Vector2(0, 0);
+    var targetReached = null;
+    var startPosition = null;
 
     // Parameters:
     // point: The Vector2 coordinates the actor will face
@@ -33,6 +37,9 @@ var Actor = (function (parameters) {
     // done: Callback executed after the actor reaches their destination
     function walkTo(parameters) {
         state = "WALK";
+        targetPosition = parameters.position;
+        startPosition = currentPosition;
+        targetReached = parameters.done;
     }
 
     // Parameters:
@@ -49,6 +56,19 @@ var Actor = (function (parameters) {
                 break;
 
             case "WALK":
+                if ((targetPosition.x >= currentPosition.x - step / 2) &&
+                    (targetPosition.x <= currentPosition.x + step / 2 &&
+                    (targetPosition.y >= currentPosition.y - step / 2) &&
+                    targetPosition.y <= currentPosition.y +  step / 2)) {
+                    state = "IDLE";
+                    targetReached();
+                } else {
+                    // Get vector of the line
+                    var lineVector = startPosition.subtract(targetPosition).normalize();
+                    lineVector = lineVector.scale(step * -1);
+                    currentPosition = lineVector.add(currentPosition);
+                    sprite.position(currentPosition);
+                }
                 break;
 
             case "ANIMATE":

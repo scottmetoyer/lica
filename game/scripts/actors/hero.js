@@ -13,7 +13,8 @@ var Hero = (function (parameters) {
     });
 
     var parent = new Actor({
-        sprite: sprite
+        sprite: sprite,
+        step: 10
     });
 
     return {
@@ -22,7 +23,8 @@ var Hero = (function (parameters) {
         update: parent.update,
         draw: parent.draw,
         scale: parent.scale,
-        facePoint: parent.facePoint
+        facePoint: parent.facePoint,
+        walkTo: parent.walkTo
     };
 })();
 
