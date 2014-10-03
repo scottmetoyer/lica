@@ -14,7 +14,7 @@ var Hero = (function (parameters) {
 
     var parent = new Actor({
         sprite: sprite,
-        step: 10
+        step: 2
     });
 
     return {

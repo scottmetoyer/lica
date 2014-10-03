@@ -11,6 +11,7 @@ var Sprite = (function (parameters) {
     var currentLoop = parameters.loop;
     var currentPosition = new Vector2(0, 0);
     var currentAnimationIndex = 0;
+    var playingAnimation = false;
 
     var lastUpdate = Date.now();
     var frameIndex = 0;
@@ -54,7 +55,7 @@ var Sprite = (function (parameters) {
         var elapsed = (gameTime - lastUpdate);
 
         // Time to update the frame
-        if (elapsed >= interval) {
+        if (elapsed >= interval && playingAnimation) {
             frameIndex++;
 
             if (frameIndex >= numberOfFrames[currentAnimationIndex]) {
@@ -69,15 +70,26 @@ var Sprite = (function (parameters) {
         }
     }
 
+    function stopAnimation(reset) {
+        currentLoop = false;
+        playingAnimation = false;
+        
+        if (reset) {
+            frameIndex = 0;
+        }
+    }
+
+    function playAnimation(animationIndex, loop) {
+        currentAnimationIndex = animationIndex;
+        currentLoop = loop;
+        playingAnimation = true;
+    }
+
     return {
         draw: draw,
         update: update,
-        loop: function(value) {
-            if (value != undefined) {
-                currentLoop = value;
-            }
-            return currentLoop;
-        },
+        stopAnimation: stopAnimation,
+        playAnimation: playAnimation,
         scale: function(value) {
             if (value != undefined) {
                 currentScale = value;

@@ -8,6 +8,7 @@ var Actor = (function (parameters) {
     var targetPosition = new Vector2(0, 0);
     var targetReached = null;
     var startPosition = null;
+    var animationIndex = 0;
 
     // Parameters:
     // point: The Vector2 coordinates the actor will face
@@ -19,17 +20,19 @@ var Actor = (function (parameters) {
 
         if (angle >= 0 && angle < 45 || angle > 315 && angle <= 360) {
             facing = "EAST";
-            sprite.animationIndex(3);
+            animationIndex = 3;
         } else if (angle >= 45 && angle < 135) {
             facing = "SOUTH";
-            sprite.animationIndex(0);
+            animationIndex = 0;
         } else if (angle >= 135 && angle < 225) {
             facing = "WEST";
-            sprite.animationIndex(1);
+            animationIndex = 1;
         } else if (angle >= 225 && angle < 315) {
             facing = "NORTH";
-            sprite.animationIndex(2);
+            animationIndex = 2;
         }
+
+        sprite.animationIndex(animationIndex);
     }
 
     // Parameters:
@@ -40,7 +43,7 @@ var Actor = (function (parameters) {
         targetPosition = parameters.position;
         startPosition = currentPosition;
         targetReached = parameters.done;
-        sprite.loop(true);
+        sprite.playAnimation(animationIndex, true);
     }
 
     // Parameters:
@@ -63,7 +66,7 @@ var Actor = (function (parameters) {
                     targetPosition.y <= currentPosition.y +  step / 2)) {
                     state = "IDLE";
                     targetReached();
-                    sprite.loop(false);
+                    sprite.stopAnimation(true);
                 } else {
                     // Get vector of the line
                     var lineVector = startPosition.subtract(targetPosition).normalize();
