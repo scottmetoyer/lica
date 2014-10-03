@@ -40,6 +40,7 @@ var Actor = (function (parameters) {
         targetPosition = parameters.position;
         startPosition = currentPosition;
         targetReached = parameters.done;
+        sprite.loop(true);
     }
 
     // Parameters:
@@ -62,6 +63,7 @@ var Actor = (function (parameters) {
                     targetPosition.y <= currentPosition.y +  step / 2)) {
                     state = "IDLE";
                     targetReached();
+                    sprite.loop(false);
                 } else {
                     // Get vector of the line
                     var lineVector = startPosition.subtract(targetPosition).normalize();
@@ -77,6 +79,8 @@ var Actor = (function (parameters) {
             default:
                 break;
         }
+
+        sprite.update(Date.now());
     }
 
     function draw() {

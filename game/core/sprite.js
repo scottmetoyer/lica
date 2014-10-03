@@ -8,7 +8,7 @@ var Sprite = (function (parameters) {
     var interval = parameters.interval;
     var numberOfFrames = parameters.numberOfFrames;
     var currentScale = parameters.scale;
-    var loop = parameters.loop;
+    var currentLoop = parameters.loop;
     var currentPosition = new Vector2(0, 0);
     var currentAnimationIndex = 0;
 
@@ -58,7 +58,7 @@ var Sprite = (function (parameters) {
             frameIndex++;
 
             if (frameIndex >= numberOfFrames[currentAnimationIndex]) {
-                if (loop) {
+                if (currentLoop) {
                     frameIndex = 0;
                 } else {
                     frameIndex = numberOfFrames[currentAnimationIndex] - 1;
@@ -72,6 +72,12 @@ var Sprite = (function (parameters) {
     return {
         draw: draw,
         update: update,
+        loop: function(value) {
+            if (value != undefined) {
+                currentLoop = value;
+            }
+            return currentLoop;
+        },
         scale: function(value) {
             if (value != undefined) {
                 currentScale = value;
