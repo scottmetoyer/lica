@@ -45,6 +45,10 @@ var Engine = (function () {
     function loadScene(scene) {
         Engine.currentScene(scene);
         canvas.style.backgroundImage = "url('assets/backgrounds/" + scene.background() + "')";
+
+        // Place the hero
+        Hero.position(new Vector2(100, 300));
+
         resize();
     }
 
@@ -88,7 +92,10 @@ var Engine = (function () {
         if (currentAction == "WALK") {
             // TODO: Create a pathfinder and navigate hero to the destination
             hero.facePoint(point);
-            hero.position(point);
+            hero.walkTo({
+                position: point,
+                done: function () { alert("Made it!"); }
+            });
             handled = true;
         }
 
