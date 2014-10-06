@@ -1,52 +1,15 @@
-var Pathfinder = (function (options) {
+var Pathfinder = (function (parameters) {
     var closedList = [];
     var openList = [];
-    var diameter = 10;
+    var mesh = parameters.mesh;
 
-    function navigate() {
-    }
+    // Parameters:
+    // start: The Vector2 start point
+    // end: The Vector2 end point
+    function navigate(start, end) {
+        while (openList.length > 0) {
 
-    function buildGraph(polygons, links) {
-        var nodes = {};
-
-        for (var i = 0; i < polygons.length; i++) {
-            var polygon = polygons[i];
-            var node = polygon.centroid;
-            node.links = [];
-
-            for (var j = 0; i < links.length; j++) {
-                var link = links[j];
-                if (Polygon.checkIntersect(link, diameter, polygon) == true) {
-                    // Link is in this polygon. Add it to the node.
-                    node.links.push(link);
-
-                    // Find any existing nodes for this link
-                    var linkNode = findExistingNode(nodes, link);
-
-                    // If one is found, link the centroid...
-                    if (linkNode) {
-                        linkNode.links.push(polygon.centroid);
-                    } else {
-                        // ...otherwise, just add a new node
-                        linkNode = link;
-                        nodes.push(linkNode);
-                    }
-                }
-            }
-
-            nodes.push(node);
         }
-    }
-
-    function findExistingNode(nodes, nodeToFind) {
-        var node = null;
-
-        for (var i = 0; i < nodes.length; i++) {
-            if (nodes[i].x == nodeToFind.x && nodes[i].y == nodeToFind.y) {
-                node = nodes[i];
-            }
-        }
-        return node;
     }
 
     return {
