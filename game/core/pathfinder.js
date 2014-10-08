@@ -9,7 +9,7 @@ var Pathfinder = (function (parameters) {
     // end: The Vector2 end point
     function navigate(start, end) {
         openList = [];
-        var node = { point: start, parent: null, f: 0,  };
+        var node = { point: start, parent: null, f: 0, g: 0, h: 0 };
         openList.push(node);
         var loopCount = 0;
 
@@ -17,12 +17,12 @@ var Pathfinder = (function (parameters) {
             var polygon = findPolygonByPoint(node);
 
             // Add points (centroid and links) in this polygon to the open list
-            openList.push({ point: polygon.centroid, parent: node, f: node.f + 1 });
+            openList.push({ point: polygon.centroid, parent: node, f: node.f + 1, g: 0, h: 0 });
 
             var links = findPointsInPolygon(polygon);
 
             for (var i = 0; i < links.length; i++) {
-                openList.push({ point: links[i], parent: node, f: node.f + 1 });
+                openList.push({ point: links[i], parent: node, f: node.f + 1, g: 0, h: 0 });
             }
 
             // Remove the lowest scored node and put it on the closed list. Set it as the selected node.
@@ -34,6 +34,9 @@ var Pathfinder = (function (parameters) {
 
     function findPointsInPolygon(polygon) {
 
+    }
+
+    function calculateHValue(point) {
     }
 
     return {
