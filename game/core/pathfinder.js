@@ -3,40 +3,26 @@ var Pathfinder = (function (parameters) {
     var openList = [];
     var mesh = parameters.mesh;
 
-    // http://www.policyalmanac.org/games/aStarTutorial.htm
     // Parameters:
     // start: The Vector2 start point
     // end: The Vector2 end point
     function navigate(start, end) {
-        openList = [];
-        var node = { point: start, parent: null, f: 0, g: 0, h: 0 };
-        openList.push(node);
-        var loopCount = 0;
+        var nodes = mesh.links;
+        var polygons = mesh.polygons;
+        
+        nodes.push(start);
+        nodes.push(end);
 
-        while (openList.length > 0) {
-            var polygon = findPolygonByPoint(node);
+        var graph = buildGraph(nodes, polygons);
 
-            // Add points (centroid and links) in this polygon to the open list
-            openList.push({ point: polygon.centroid, parent: node, f: node.f + 1, g: 0, h: 0 });
+        // TODO: Apply Djikstra's algorithm to this graph to get a path and return it
+    }
 
-            var links = findPointsInPolygon(polygon);
+    function buildGraph(nodes, polygons) {
+        for (var i = 0; i < polygons.length; i++) {
+            // Get the nodes that intersect this polygon
 
-            for (var i = 0; i < links.length; i++) {
-                openList.push({ point: links[i], parent: node, f: node.f + 1, g: 0, h: 0 });
-            }
-
-            // Remove the lowest scored node and put it on the closed list. Set it as the selected node.
         }
-    }
-
-    function findPolygonByPoint(point) {
-    }
-
-    function findPointsInPolygon(polygon) {
-
-    }
-
-    function calculateHValue(point) {
     }
 
     return {
