@@ -4,6 +4,7 @@ var Engine = (function () {
     var canvas = document.getElementById('canvas');
     var context = canvas.getContext('2d');
     var currentScene = null;
+    var currentNavMesh = null;
     var hero = null;
     var objects = [];
     var scenes = [];
@@ -46,8 +47,11 @@ var Engine = (function () {
         Engine.currentScene(scene);
         canvas.style.backgroundImage = "url('assets/backgrounds/" + scene.background() + "')";
 
+        // Initialize the navigation mesh
+
+
         // Place the hero
-        Hero.position(new Vector2(100, 300));
+        Hero.position(new Vector2(140, 600));
 
         resize();
     }
@@ -91,6 +95,9 @@ var Engine = (function () {
 
         if (currentAction == "WALK") {
             // TODO: Create a pathfinder and navigate hero to the destination
+            var pathfinder = new Pathfinder({ mesh: currentScene.navmesh() });
+            pathfinder.navigate(hero.position(), point);
+
             hero.facePoint(point);
             hero.walkTo({
                 position: point,
