@@ -7,8 +7,8 @@ var Pathfinder = (function (parameters) {
     // start: The Vector2 start point
     // end: The Vector2 end point
     function navigate(start, end) {
-        var links = mesh.links;
-        var polygons = mesh.polygons;
+        var links = mesh.links.slice();
+        var polygons = mesh.polygons.slice();
 
         links.push(start);
         links.push(end);
@@ -38,19 +38,6 @@ var Pathfinder = (function (parameters) {
         }
 
         return graph;
-    }
-
-    function getNodesInPolygon(nodes, polygon) {
-        var nodes = [];
-        var linkDiameter = 10;
-
-        for (var i = 0; i < nodex.length; i++) {
-            if (polygon.checkIntersect(nodes[i], linkDiameter, polygon)) {
-                nodes.push(nodes[i]);
-            }
-        }
-
-        return nodes;
     }
 
     return {
