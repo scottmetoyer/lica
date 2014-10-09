@@ -47,8 +47,24 @@ var Engine = (function () {
         Engine.currentScene(scene);
         canvas.style.backgroundImage = "url('assets/backgrounds/" + scene.background() + "')";
 
-        // Initialize the navigation mesh
+        // Initialize the nav mesh
+        currentNavMesh = currentScene.navmesh();
 
+        for (var i = 0; i < currentNavMesh.polygons.length; i++) {
+            var centroid = currentNavMesh.polygons[i].centroid;
+            centroid = new Vector2(centroid.x, centroid.y);
+            currentNavMesh.polygons[i].centroid = centroid;
+
+            for (var j = 0; j < currentNavMesh.polygons[i].vertices.length; j++) {
+                var vertex = currentNavMesh.polygons[i].vertices[j];
+                vertex = new Vector2(vertex.x, vertex.y);
+                currentNavMesh.polygons[i].vertices[j] = vertex;
+            }
+        }
+
+        for (var i = 0; i < currentNavMesh.links.length; i++) {
+            currentNavMesh.links[i] = new Vector2(currentNavMesh.links[i].x, currentNavMesh.links[i].y);
+        }
 
         // Place the hero
         Hero.position(new Vector2(140, 600));
@@ -95,7 +111,7 @@ var Engine = (function () {
 
         if (currentAction == "WALK") {
             // TODO: Create a pathfinder and navigate hero to the destination
-            var pathfinder = new Pathfinder({ mesh: currentScene.navmesh() });
+            var pathfinder = new Pathfinder({ mesh: currentNavMesh });
             pathfinder.navigate(hero.position(), point);
 
             hero.facePoint(point);

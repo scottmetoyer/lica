@@ -29,7 +29,7 @@ var Pathfinder = (function (parameters) {
             for (var j = 0; j < links.length; j++) {
                 if (Polygon.checkIntersect(links[j], linkDiameter, polygons[i])) {
                     for (var k = 0; k < links.length; k++) {
-                        if (Polygon.checkIntersect(links[k], linkDiameter, polygons[i] && k != j)) {
+                        if (Polygon.checkIntersect(links[k], linkDiameter, polygons[i]) && k != j) {
                             graph.addEdge(j, k)
                         }
                     }
