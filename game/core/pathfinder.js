@@ -7,16 +7,20 @@ var Pathfinder = (function (parameters) {
     // start: The Vector2 start point
     // end: The Vector2 end point
     function navigate(start, end) {
-        var links = mesh.links.slice();
-        var polygons = mesh.polygons.slice();
+        var links = mesh.links().slice();
+        var polygons = mesh.polygons().slice();
 
         links.push(start);
         links.push(end);
 
-        var graph = buildGraph(links, polygons);
+        for (var i = 0; i < links.length; i++) {
+            console.log(links[i]);
+        }
+
+        //var graph = buildGraph(links, polygons);
 
         // TODO: Apply Djikstra's algorithm to this graph to get a path and return it
-        graph.toString();
+        //graph.toString();
     }
 
     // Create a navigatable graph from a list of links and polygons
@@ -25,7 +29,6 @@ var Pathfinder = (function (parameters) {
         var linkDiameter = 10;
 
         for (var i = 0; i < polygons.length; i++) {
-            // Get the nodes that intersect this polygon
             for (var j = 0; j < links.length; j++) {
                 if (Polygon.checkIntersect(links[j], linkDiameter, polygons[i])) {
                     for (var k = 0; k < links.length; k++) {

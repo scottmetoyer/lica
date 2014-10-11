@@ -57,8 +57,7 @@ Graph.prototype.toString = function () {
       this._numOfEdges + " edges");
     for (var i = 0; i < vertices.length; i++) {
         adjString = vertices[i] + ":";
-        currentNode =
-        this._adjacencyLists[vertices[i]].head;
+        currentNode = this._adjacencyLists[vertices[i]].head;
         while (currentNode) {
             adjString += " " + currentNode.value;
             currentNode = currentNode.next;
