@@ -1,7 +1,6 @@
 var Navmesh = (function (parameters) {
     var polygons = null;
     var links = null;
-    var scaleValue = 1.0;
 
     if (parameters.scale != undefined) {
         scaleValue = parameters.scale;
@@ -30,27 +29,7 @@ var Navmesh = (function (parameters) {
         }
     }
 
-    function scale(value) {
-        if (value != undefined) {
-            scaleValue = value;
-
-            for (var i = 0; i < links.length; i++) {
-               links[i] = links[i].scale(scaleValue)
-            }
-
-            for (var i = 0; i < polygons.length; i++) {
-                polygons[i].centroid = polygons[i].centroid.scale(scale);
-
-                for (var j = 0; j < polygons[i].vertices.length; j++) {
-                    polygons[i].vertices[j] = polygons[i].vertices[j].scale(scale);
-                }
-            }
-        }
-        return scaleValue;
-    }
-
     return {
-        scale: scale,
         polygons: function (value) {
             if (value != undefined) {
                 polygons = value;

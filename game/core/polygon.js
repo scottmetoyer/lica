@@ -43,6 +43,14 @@ var Polygon = (function () {
         return intersects;
     }
 
+    function scale(polygon, scale) {
+        for (var i = 0; i < polygon.vertices.length; i++) {
+            polygon.vertices[i].scale(scale);
+        }
+
+        return polygon;
+    }
+
     function checkIntersect(point, diameter, polygon) {
         var intersects = false;
 

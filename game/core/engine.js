@@ -11,6 +11,32 @@ var Engine = (function () {
     var currentAction = "WALK";
     var scale = 1.0;
 
+    function drawPolygon(polygon) {
+        var isConvex = false;
+
+        if (polygon.vertices.length > 0) {
+            if (Polygon.isConcave(polygon.vertices)) {
+                context.fillStyle = 'rgba(255, 0, 0, 0.5)';
+            }
+            else {
+                isConvex = true;
+                context.fillStyle = 'rgba(0, 0, 255, 0.5)';
+            }
+            context.beginPath();
+            context.moveTo(polygon.vertices[0].x * scale, polygon.vertices[0].y * scale);
+
+            // Draw the polygon
+            for (var i = 1; i < polygon.vertices.length; i++) {
+                context.lineTo(polygon.vertices[i].x * scale, polygon.vertices[i].y * scale);
+            }
+
+            context.closePath();
+            context.strokeStyle = 'blue';
+            context.stroke();
+            context.fill();
+        }
+    }
+
     function resize() {
         var content = document.getElementById('content');
 
@@ -41,9 +67,6 @@ var Engine = (function () {
         for (var i = 0; i < objects.length; i++) {
             objects[i].scale(scale);
         }
-
-        // Apply scale to navmesh
-        currentNavMesh.scale(scale);
     }
 
     function loadScene(scene) {
@@ -80,6 +103,10 @@ var Engine = (function () {
         for (var i = 0; i < objects.length; i++) {
             objects[i].update(Date.now());
             objects[i].draw();
+        }
+
+        for (var i = 0; i < currentNavMesh.polygons().length; i++) {
+            drawPolygon(currentNavMesh.polygons()[i]);
         }
     }
 
