@@ -42,7 +42,11 @@ var Actor = (function (parameters) {
         state = "WALK";
         targetPosition = parameters.position;
         startPosition = currentPosition;
-        targetReached = parameters.done;
+
+        if (parameters.done != undefined) {
+            targetReached = parameters.done;
+        }
+
         sprite.playAnimation(animationIndex, true);
     }
 
@@ -65,7 +69,11 @@ var Actor = (function (parameters) {
                     (targetPosition.y >= currentPosition.y - step / 2) &&
                     targetPosition.y <= currentPosition.y +  step / 2)) {
                     state = "IDLE";
-                    targetReached();
+                    
+                    if (targetReached != undefined) {
+                        targetReached();
+                    }
+
                     sprite.stopAnimation(true);
                 } else {
                     // Get vector of the line

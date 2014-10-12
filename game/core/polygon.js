@@ -3,6 +3,9 @@
 // Scott Metoyer, 2014
 
 var Polygon = (function () {
+    var polygonCentroid;
+    var polygonVertices = [];
+
     function checkPointInPolygon(vertices, point) {
         var intersects = false;
 
@@ -45,7 +48,7 @@ var Polygon = (function () {
 
     function scale(polygon, scale) {
         for (var i = 0; i < polygon.vertices.length; i++) {
-            polygon.vertices[i].scale(scale);
+            polygon.vertices[i] = polygon.vertices[i].scale(scale);
         }
 
         return polygon;
@@ -140,6 +143,19 @@ var Polygon = (function () {
     }
 
     return {
+        centroid: function(value) {
+            if (value != undefined) {
+                polygonCentroid = value;
+            }
+            return polygonCentroid;
+        },
+        vertices: function(value) {
+            if (value != undefined) {
+                polygonVertices = value;
+            }
+            return polygonVertices;
+        },
+        scale: scale,
         isConcave: isConcave,
         computeCentroid: computeCentroid,
         checkIntersect: checkIntersect

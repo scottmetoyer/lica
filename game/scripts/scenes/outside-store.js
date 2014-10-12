@@ -3,12 +3,12 @@ var OutsideStore = (function (options) {
 
     var name = 'Outside Store';
     var background = 'outside-store.png';
-    var navmesh = {};
+    var navmeshJson = '{}';
 
     return {
         name: function () { return name; },
         background: function () { return background; },
-        navmesh: function () { return navmesh; }
+        navmeshJson: function () { return navmeshJson; }
     };
 })();
 

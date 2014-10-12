@@ -4,7 +4,7 @@ var Engine = (function () {
     var canvas = document.getElementById('canvas');
     var context = canvas.getContext('2d');
     var currentScene = null;
-    var currentNavMesh = null;
+    var currentNavmesh = null;
     var hero = null;
     var objects = [];
     var scenes = [];
@@ -23,11 +23,11 @@ var Engine = (function () {
                 context.fillStyle = 'rgba(0, 0, 255, 0.5)';
             }
             context.beginPath();
-            context.moveTo(polygon.vertices[0].x * scale, polygon.vertices[0].y * scale);
+            context.moveTo(polygon.vertices[0].x, polygon.vertices[0].y);
 
             // Draw the polygon
             for (var i = 1; i < polygon.vertices.length; i++) {
-                context.lineTo(polygon.vertices[i].x * scale, polygon.vertices[i].y * scale);
+                context.lineTo(polygon.vertices[i].x, polygon.vertices[i].y);
             }
 
             context.closePath();
@@ -67,15 +67,15 @@ var Engine = (function () {
         for (var i = 0; i < objects.length; i++) {
             objects[i].scale(scale);
         }
+
+        // Resize the navmesh
+        currentNavmesh = Navmesh.render(currentScene.navmeshJson(), scale);
     }
 
     function loadScene(scene) {
         Engine.currentScene(scene);
         canvas.style.backgroundImage = "url('assets/backgrounds/" + scene.background() + "')";
 
-        // Initialize the nav mesh
-        currentNavMesh = new Navmesh({ obj: scene.navmesh() });
-       
         // Place the hero
         Hero.position(new Vector2(140, 600));
 
@@ -105,8 +105,8 @@ var Engine = (function () {
             objects[i].draw();
         }
 
-        for (var i = 0; i < currentNavMesh.polygons().length; i++) {
-            drawPolygon(currentNavMesh.polygons()[i]);
+        for (var i = 0; i < currentNavmesh.polygons.length; i++) {
+            drawPolygon(currentNavmesh.polygons[i]);
         }
     }
 
@@ -124,14 +124,15 @@ var Engine = (function () {
         var handled = false;
 
         if (currentAction == "WALK") {
+            console.log(point);
             // TODO: Create a pathfinder and navigate hero to the destination
-            var pathfinder = new Pathfinder({ mesh: currentNavMesh });
+            var pathfinder = new Pathfinder({ navmeshJson: currentScene.navmeshJson(), scale: scale });
             pathfinder.navigate(hero.position(), point);
 
             hero.facePoint(point);
             hero.walkTo({
                 position: point,
-                done: function () { alert("Made it!"); }
+                done: function () { alert("Detination reached"); }
             });
             handled = true;
         }

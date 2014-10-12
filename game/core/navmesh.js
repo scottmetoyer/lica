@@ -1,46 +1,28 @@
 var Navmesh = (function (parameters) {
-    var polygons = null;
-    var links = null;
+    // Renders a navmesh JSON string into an object graph 
+    function render(json, scale) {
+        var mesh = JSON.parse(json);
 
-    if (parameters.scale != undefined) {
-        scaleValue = parameters.scale;
-    }
+        for (var i = 0; i < mesh.polygons.length; i++) {
+            var centroid = mesh.polygons[i].centroid;
+            centroid = new Vector2(centroid.x, centroid.y).scale(scale);
+            mesh.polygons[i].centroid = centroid;
 
-    if (parameters.obj != undefined) {
-        var obj = parameters.obj;
-
-        polygons = obj.polygons.slice();
-        links = obj.links.slice();
-
-        for (var i = 0; i < polygons.length; i++) {
-            var centroid = polygons[i].centroid;
-            centroid = new Vector2(centroid.x, centroid.y);
-            polygons[i].centroid = centroid;
-
-            for (var j = 0; j < polygons[i].vertices.length; j++) {
-                var vertex = polygons[i].vertices[j];
-                vertex = new Vector2(vertex.x, vertex.y);
-                polygons[i].vertices[j] = vertex;
+            for (var j = 0; j < mesh.polygons[i].vertices.length; j++) {
+                var vertex = mesh.polygons[i].vertices[j];
+                vertex = new Vector2(vertex.x, vertex.y).scale(scale);
+                mesh.polygons[i].vertices[j] = vertex;
             }
         }
 
-        for (var i = 0; i < links.length; i++) {
-            links[i] = new Vector2(links[i].x, links[i].y);
+        for (var i = 0; i < mesh.links.length; i++) {
+            mesh.links[i] = new Vector2(mesh.links[i].x, mesh.links[i].y).scale(scale);
         }
+
+        return mesh;
     }
 
     return {
-        polygons: function (value) {
-            if (value != undefined) {
-                polygons = value;
-            }
-            return polygons;
-        },
-        links: function (value) {
-            if (value != undefined) {
-                links = value;
-            }
-            return links;
-        }
+        render: render
     }
-});
+})();

@@ -3,12 +3,12 @@ var Alleyway = (function (options) {
 
     var name = 'Alleyway';
     var background = 'alleyway.png';
-    var navmesh = {};
+    var navmesh = '{}';
 
     return {
         name: function () { return name; },
         background: function () { return background; },
-        navmesh: function () { return navmesh; }
+        navmeshJson: function () { return navmeshJson; }
     };
 })();
 
