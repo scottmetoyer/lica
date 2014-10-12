@@ -4,7 +4,7 @@ var Actor = (function (parameters) {
     var zindex = 0;
     var sprite = parameters.sprite;
     var step = parameters.step;
-    var currentPosition = new Vector2(0, 0);
+    var currentAbsolutePosition = new Vector2(0, 0);
     var targetPosition = new Vector2(0, 0);
     var targetReached = null;
     var startPosition = null;
@@ -13,7 +13,7 @@ var Actor = (function (parameters) {
     // Parameters:
     // point: The Vector2 coordinates the actor will face
     function facePoint(point) {
-        var theta = Math.atan2(point.y - currentPosition.y, point.x - currentPosition.x);
+        var theta = Math.atan2(point.y - currentAbsolutePosition.y, point.x - currentAbsolutePosition.x);
         if (theta < 0)
             theta += 2 * Math.PI;
         var angle = theta * 180 / Math.PI;
@@ -41,7 +41,7 @@ var Actor = (function (parameters) {
     function walkTo(parameters) {
         state = "WALK";
         targetPosition = parameters.position;
-        startPosition = currentPosition;
+        startPosition = currentAbsolutePosition;
 
         if (parameters.done != undefined) {
             targetReached = parameters.done;
@@ -64,10 +64,10 @@ var Actor = (function (parameters) {
                 break;
 
             case "WALK":
-                if ((targetPosition.x >= currentPosition.x - step / 2) &&
-                    (targetPosition.x <= currentPosition.x + step / 2 &&
-                    (targetPosition.y >= currentPosition.y - step / 2) &&
-                    targetPosition.y <= currentPosition.y +  step / 2)) {
+                if ((targetPosition.x >= currentAbsolutePosition.x - step / 2) &&
+                    (targetPosition.x <= currentAbsolutePosition.x + step / 2 &&
+                    (targetPosition.y >= currentAbsolutePosition.y - step / 2) &&
+                    targetPosition.y <= currentAbsolutePosition.y + step / 2)) {
                     state = "IDLE";
                     
                     if (targetReached != undefined) {
@@ -79,8 +79,8 @@ var Actor = (function (parameters) {
                     // Get vector of the line
                     var lineVector = startPosition.subtract(targetPosition).normalize();
                     lineVector = lineVector.scale(step * -1);
-                    currentPosition = lineVector.add(currentPosition);
-                    sprite.position(currentPosition);
+                    currentAbsolutePosition = lineVector.add(currentAbsolutePosition);
+                    sprite.position(currentAbsolutePosition);
                 }
                 break;
 
@@ -104,10 +104,10 @@ var Actor = (function (parameters) {
         playAnimation: playAnimation,
         position: function (value) {
             if (value != undefined) {
-                currentPosition = value;
-                sprite.position(currentPosition);
+                currentAbsolutePosition = value;
+                sprite.position(currentAbsolutePosition);
             }
-            return currentPosition;
+            return currentAbsolutePosition;
         },
         update: update,
         draw: draw,

@@ -132,7 +132,7 @@ var Engine = (function () {
             hero.facePoint(point);
             hero.walkTo({
                 position: point,
-                done: function () { alert("Detination reached"); }
+                done: function () { alert("Destination reached"); }
             });
             handled = true;
         }
@@ -140,14 +140,14 @@ var Engine = (function () {
         return handled;
     }
 
-    function handleClick(event) {
-        var x = event.layerX;
-        var y = event.layerY;
+    function getPosition(event) {
+        var rect = canvas.getBoundingClientRect();
+        return new Vector2(event.clientX - rect.left, event.clientY - rect.top);
+    }
 
-        // Translate to game coordinates
-        x = x / scale;
-        y = y / scale;
-        var point = new Vector2(x, y);
+    function handleClick(event) {
+        // Translate to game coordinate 
+        var point = getPosition(event).divide(scale);
 
         if (handleInterfaceClick(point)) {
             event.preventDefault();
