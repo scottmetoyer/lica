@@ -35,14 +35,31 @@ AdjacencyList.prototype.remove = function () {
     }
 };
 
+AdjacencyList.prototype.contains = function (value) {
+    var found = false;
+    currentNode = this.head;
+
+    while (currentNode) {
+        if (currentNode.value == value) {
+            found = true;
+        }
+        currentNode = currentNode.next;
+    }
+
+    return found;
+}
+
 Graph.prototype.addEdge = function (v, w) {
     this._adjacencyLists[v] = this._adjacencyLists[v] ||
       new AdjacencyList();
     this._adjacencyLists[w] = this._adjacencyLists[w] ||
       new AdjacencyList();
-    this._adjacencyLists[v].add(w);
-    this._adjacencyLists[w].add(v);
-    this._numOfEdges++;
+
+    if (!(this._adjacencyLists[v].contains(w)) && !(this._adjacencyLists[w].contains(v))) {
+        this._adjacencyLists[v].add(w);
+        this._adjacencyLists[w].add(v);
+        this._numOfEdges++;
+    }
 };
 
 Graph.prototype.getVertices = function () {
