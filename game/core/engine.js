@@ -11,32 +11,6 @@ var Engine = (function () {
     var currentAction = "WALK";
     var scale = 1.0;
 
-    function drawPolygon(polygon) {
-        var isConvex = false;
-
-        if (polygon.vertices.length > 0) {
-            if (Polygon.isConcave(polygon.vertices)) {
-                context.fillStyle = 'rgba(255, 0, 0, 0.5)';
-            }
-            else {
-                isConvex = true;
-                context.fillStyle = 'rgba(0, 0, 255, 0.5)';
-            }
-            context.beginPath();
-            context.moveTo(polygon.vertices[0].x, polygon.vertices[0].y);
-
-            // Draw the polygon
-            for (var i = 1; i < polygon.vertices.length; i++) {
-                context.lineTo(polygon.vertices[i].x, polygon.vertices[i].y);
-            }
-
-            context.closePath();
-            context.strokeStyle = 'blue';
-            context.stroke();
-            context.fill();
-        }
-    }
-
     function resize() {
         var content = document.getElementById('content');
 
@@ -104,10 +78,6 @@ var Engine = (function () {
             objects[i].update(Date.now());
             objects[i].draw();
         }
-
-        for (var i = 0; i < currentNavmesh.polygons.length; i++) {
-            drawPolygon(currentNavmesh.polygons[i]);
-        }
     }
 
     function handleInterfaceClick(point) {
@@ -124,16 +94,17 @@ var Engine = (function () {
         var handled = false;
 
         if (currentAction == "WALK") {
-            console.log(point);
-            // TODO: Create a pathfinder and navigate hero to the destination
+            // Create a pathfinder and navigate hero to the destination
             var pathfinder = new Pathfinder({ navmeshJson: currentScene.navmeshJson(), scale: scale });
-            pathfinder.navigate(hero.position(), point);
+            var path = pathfinder.navigate(hero.position(), point);
 
-            hero.facePoint(point);
-            hero.walkTo({
-                position: point,
-                done: function () { alert("Destination reached"); }
-            });
+            if (path != null) {
+                hero.facePoint(point);
+                hero.walkTo({
+                    position: point,
+                    done: function () { alert("Destination reached"); }
+                });
+            }
             handled = true;
         }
 
