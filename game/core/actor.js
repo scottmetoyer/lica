@@ -51,6 +51,13 @@ var Actor = (function (parameters) {
     }
 
     // Parameters:
+    // path: A list of Vector2 screen positions to walk to in sequence
+    // done: Callback executed after the actor reaches their destination
+    function walkPath(parameters) {
+        state = "WALK";
+    }
+
+    // Parameters:
     // name: The name of the animation to play
     // loop: Loop the animation? True or false.
     // done: Callback executed when the animation is done playing, or after one loop for looped animations
