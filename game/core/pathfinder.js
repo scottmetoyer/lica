@@ -17,16 +17,29 @@ var Pathfinder = (function (parameters) {
             }
         }
 
+        // If the click is out of bounds, just return and do nothing
         if (!inBounds) {
             return null;
         }
 
-        mesh.links.push(start.scale(scale));
-        mesh.links.push(end.scale(scale));
+        start = start.scale(scale);
+        end = end.scale(scale);
+        mesh.links.push(start);
+        mesh.links.push(end);
 
         var graph = buildGraph(mesh);
-        graph.toString();
-        return graph;
+        var path = findShortestPath(start, end, graph);
+
+        return path;
+    }
+
+    function findShortestPath(start, end, graph) {
+        var path = [];
+
+        path.push(start);
+        path.push(end);
+
+        return path;
     }
 
     // Create a navigatable graph from a list of links and polygons
