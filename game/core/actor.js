@@ -59,8 +59,11 @@ var Actor = (function (parameters) {
         state = "WALK";
         path = parameters.path;
         pathIndex = 0;
-        targetPosition = path[path.length - 1];
         startPosition = path[0];
+
+        if (path.length > 1) {
+            targetPosition = path[1];
+        }
 
         if (parameters.done != undefined) {
             targetReached = parameters.done;
@@ -87,13 +90,20 @@ var Actor = (function (parameters) {
                     (targetPosition.x <= currentAbsolutePosition.x + step / 2 &&
                     (targetPosition.y >= currentAbsolutePosition.y - step / 2) &&
                     targetPosition.y <= currentAbsolutePosition.y + step / 2)) {
-                    state = "IDLE";
-                    
-                    if (targetReached != undefined) {
-                        targetReached();
+
+                    if (pathIndex == path.length) {
+                        state = "IDLE";
+
+                        if (targetReached != undefined) {
+                            sprite.stopAnimation(true);
+                            targetReached();
+                        }
+                    } else {
+                        startPosition = path[pathIndex];
+                        targetPosition = path[pathIndex + 1];
                     }
 
-                    sprite.stopAnimation(true);
+                    pathIndex++;
                 } else {
                     // Get vector of the line
                     var lineVector = startPosition.subtract(targetPosition).normalize();
