@@ -4,6 +4,8 @@ var Actor = (function (parameters) {
     var zindex = 0;
     var sprite = parameters.sprite;
     var step = parameters.step;
+    var path = null;
+    var pathIndex = 0;
     var currentAbsolutePosition = new Vector2(0, 0);
     var targetPosition = new Vector2(0, 0);
     var targetReached = null;
@@ -55,6 +57,16 @@ var Actor = (function (parameters) {
     // done: Callback executed after the actor reaches their destination
     function walkPath(parameters) {
         state = "WALK";
+        path = parameters.path;
+        pathIndex = 0;
+        targetPosition = path[path.length - 1];
+        startPosition = path[0];
+
+        if (parameters.done != undefined) {
+            targetReached = parameters.done;
+        }
+
+        sprite.playAnimation(animationIndex, true);
     }
 
     // Parameters:
