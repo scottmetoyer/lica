@@ -42,13 +42,18 @@ var Actor = (function (parameters) {
     // done: Callback executed after the actor reaches their destination
     function walkTo(parameters) {
         state = "WALK";
-        targetPosition = parameters.position;
+        var endPosition = parameters.position;
         startPosition = currentAbsolutePosition;
         facePoint(startPosition);
 
         // Create a pathfinder and navigate hero to the destination
         var pathfinder = new Pathfinder({ navmeshJson: Engine.currentScene().navmeshJson(), scale: sprite.scale() });
-        path = pathfinder.navigate(startPosition, targetPosition);
+        path = pathfinder.navigate(startPosition, endPosition);
+
+        if (path.length > 1) {
+            targetPosition = path[1];
+        }
+
         pathIndex = 0;
 
         if (parameters.done != undefined) {
@@ -79,17 +84,16 @@ var Actor = (function (parameters) {
 
                     if (pathIndex == path.length) {
                         state = "IDLE";
+                        sprite.stopAnimation(true);
 
                         if (targetReached != undefined) {
-                            sprite.stopAnimation(true);
                             targetReached();
                         }
                     } else {
+                        pathIndex++;
                         startPosition = path[pathIndex];
                         targetPosition = path[pathIndex + 1];
                     }
-
-                    pathIndex++;
                 } else {
                     // Get vector of the line
                     var lineVector = startPosition.subtract(targetPosition).normalize();

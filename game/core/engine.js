@@ -94,10 +94,7 @@ var Engine = (function () {
         var handled = false;
 
         if (currentAction == "WALK") {
-
-
             if (path != null) {
-                hero.facePoint(point);
                 hero.walkTo({
                     position: point,
                     done: function () { alert("Destination reached"); }
