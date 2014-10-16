@@ -113,7 +113,7 @@ var Engine = (function () {
 
     function handleClick(event) {
         // Translate to game coordinate 
-        var point = getPosition(event).divide(scale);
+        var point = getPosition(event);
 
         if (handleInterfaceClick(point)) {
             event.preventDefault();

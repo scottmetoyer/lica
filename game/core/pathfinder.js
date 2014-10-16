@@ -3,6 +3,7 @@ var Pathfinder = (function (parameters) {
     var openList = [];
     var navmeshJson = parameters.navmeshJson;
     var scale = parameters.scale;
+    var infinity = 99999;
 
     // Parameters:
     // start: The Vector2 start point
@@ -12,7 +13,7 @@ var Pathfinder = (function (parameters) {
         var inBounds = false;
 
         for (var i = 0; i < mesh.polygons.length; i++) {
-            if (Polygon.checkIntersect(end.scale(scale), 10, mesh.polygons[i])) {
+            if (Polygon.checkIntersect(end, 10, mesh.polygons[i])) {
                 inBounds = true;
             }
         }
@@ -22,8 +23,6 @@ var Pathfinder = (function (parameters) {
             return null;
         }
 
-        start = start.scale(scale);
-        end = end.scale(scale);
         mesh.links.push(start);
         mesh.links.push(end);
 
@@ -35,9 +34,11 @@ var Pathfinder = (function (parameters) {
 
     function findShortestPath(start, end, graph) {
         var path = [];
+        var vertices = graph.getVertices();
 
-        path.push(start);
-        path.push(end);
+        for (var i = 0; i < vertices.length; i++) {
+
+        }
 
         return path;
     }
