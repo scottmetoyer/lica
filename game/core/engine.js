@@ -94,9 +94,7 @@ var Engine = (function () {
         var handled = false;
 
         if (currentAction == "WALK") {
-            // Create a pathfinder and navigate hero to the destination
-            var pathfinder = new Pathfinder({ navmeshJson: currentScene.navmeshJson(), scale: scale });
-            var path = pathfinder.navigate(hero.position(), point);
+
 
             if (path != null) {
                 hero.facePoint(point);
