@@ -35,6 +35,8 @@ var Pathfinder = (function (parameters) {
     function findShortestPath(start, end, graph) {
         var path = [];
         var vertices = graph.getVertices();
+        var visited = [];
+        var unvisited = [];
 
         for (var i = 0; i < vertices.length; i++) {
 
