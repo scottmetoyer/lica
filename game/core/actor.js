@@ -41,10 +41,8 @@ var Actor = (function (parameters) {
     // position: The Vector2 screen position to walk to
     // done: Callback executed after the actor reaches their destination
     function walkTo(parameters) {
-        state = "WALK";
         var endPosition = parameters.position;
         startPosition = currentAbsolutePosition;
-        facePoint(startPosition);
 
         // Create a pathfinder and navigate hero to the destination
         var pathfinder = new Pathfinder({ navmeshJson: Engine.currentScene().navmeshJson(), scale: sprite.scale() });
@@ -52,15 +50,17 @@ var Actor = (function (parameters) {
 
         if (path.length > 1) {
             targetPosition = path[1];
+            state = "WALK";
+            pathIndex = 0;
+
+            facePoint(startPosition);
+
+            if (parameters.done != undefined) {
+                targetReached = parameters.done;
+            }
+
+            sprite.playAnimation(animationIndex, true);
         }
-
-        pathIndex = 0;
-
-        if (parameters.done != undefined) {
-            targetReached = parameters.done;
-        }
-
-        sprite.playAnimation(animationIndex, true);
     }
 
     // Parameters:

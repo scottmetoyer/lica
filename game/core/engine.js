@@ -94,12 +94,11 @@ var Engine = (function () {
         var handled = false;
 
         if (currentAction == "WALK") {
-            if (path != null) {
-                hero.walkTo({
-                    position: point,
-                    done: function () { alert("Destination reached"); }
-                });
-            }
+            hero.walkTo({
+                position: point,
+                done: function () { alert("Destination reached"); }
+            });
+
             handled = true;
         }
 
@@ -113,7 +112,7 @@ var Engine = (function () {
 
     function handleClick(event) {
         // Translate to game coordinate 
-        var point = getPosition(event);
+        var point = getPosition(event).divide(scale);
 
         if (handleInterfaceClick(point)) {
             event.preventDefault();

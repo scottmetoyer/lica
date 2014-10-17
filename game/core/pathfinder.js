@@ -1,16 +1,19 @@
 var Pathfinder = (function (parameters) {
     var closedList = [];
     var openList = [];
-    var navmeshJson = parameters.navmeshJson;
+    var meshJson = parameters.navmeshJson;
     var scale = parameters.scale;
-    var infinity = 99999;
+    var mesh;
 
     // Parameters:
     // start: The Vector2 start point
     // end: The Vector2 end point
     function navigate(start, end) {
-        var mesh = Navmesh.render(navmeshJson, scale);
+        mesh = Navmesh.render(meshJson, scale);
         var inBounds = false;
+
+        start = start.scale(scale);
+        end = end.scale(scale);
 
         for (var i = 0; i < mesh.polygons.length; i++) {
             if (Polygon.checkIntersect(end, 10, mesh.polygons[i])) {
@@ -20,27 +23,12 @@ var Pathfinder = (function (parameters) {
 
         // If the click is out of bounds, just return and do nothing
         if (!inBounds) {
-            return null;
+            return [];
         }
 
         mesh.links.push(start);
         mesh.links.push(end);
-
         var graph = buildGraph(mesh);
-        var path = findShortestPath(start, end, graph);
-
-        return path;
-    }
-
-    function findShortestPath(start, end, graph) {
-        var path = [];
-        var vertices = graph.getVertices();
-        var visited = [];
-        var unvisited = [];
-
-        for (var i = 0; i < vertices.length; i++) {
-
-        }
 
         return path;
     }

@@ -1,3 +1,5 @@
+var infinity = 99999;
+
 var Graph = function () {
     this._numOfEdges = 0;
     this._adjacencyLists = {};
@@ -65,6 +67,10 @@ Graph.prototype.addEdge = function (v, w) {
 Graph.prototype.getVertices = function () {
     return Object.keys(this._adjacencyLists);
 };
+
+Graph.prototype.getAdjacencyList = function (id) {
+    return this._adjacencyLists[id];
+}
 
 Graph.prototype.toString = function () {
     var adjString = '';
