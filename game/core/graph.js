@@ -1,13 +1,32 @@
-var infinity = 99999;
-
 var Graph = function () {
     this._numOfEdges = 0;
     this._adjacencyLists = {};
 };
 
-var Vertex = function (value) {
-    this.value = value;
-    this.next = null;
+var Vertex = function () {
+    var element;
+    var visited;
+    var edges = [];
+    var next;
+
+    return {
+        element: function (value) {
+            if (value != undefined) { element = value; }
+            return element;
+        },
+        visited: function (value) {
+            if (value != undefined) { visited = value; }
+            return visited;
+        },
+        edges: function (value) {
+            if (value != undefined) { edges = value; }
+            return edges;
+        },
+        next: function (value) {
+            if (value != undefined) { next = value; }
+            return next;
+        },
+    }
 };
 
 var AdjacencyList = function () {
