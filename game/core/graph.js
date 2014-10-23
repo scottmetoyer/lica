@@ -80,8 +80,20 @@ var Graph = function () {
         return checkReachable(start, destination);
     }
 
-    function checkReachable() {
+    function checkReachable(start, destination) {
+        if (start.visited == true) {
+            return false;
+        }
 
+        if (start.element() == destination) {
+            return true;
+        }
+
+        start.visited(true);
+
+        // Recursively check the edges
+
+        return false;
     }
 
     return {
