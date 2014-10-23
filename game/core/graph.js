@@ -51,6 +51,8 @@ var Edge = function () {
 };
 
 var Graph = function () {
+    var verticeList = null;
+
     function addVertex() {
 
     }
@@ -59,14 +61,39 @@ var Graph = function () {
 
     }
 
-    function isReachable(vertex) {
+    function isReachable(graph, source, destination) {
+        var isReachable = false;
+        var start = null;
+        var vertex = graph.vertices();
+
+        while (vertex != null) {
+            vertex.visited(false);
+            if (vertex.element() == source) {
+                start = vertex;
+            }
+        }
+
+        if (start == null) {
+            return false;
+        }
+            
+        return checkReachable(start, destination);
+    }
+
+    function checkReachable() {
 
     }
 
     return {
         addVertex: addVertex,
         addEdge: addEdge,
-        isReachable: isReachable
+        isReachable: isReachable,
+        vertices: function (value) {
+            if (value != undefined) {
+                verticeList = value;
+            }
+            return verticeList;
+        }
     }
 };
 
