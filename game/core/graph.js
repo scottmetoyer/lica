@@ -92,6 +92,14 @@ var Graph = function () {
         start.visited(true);
 
         // Recursively check the edges
+        var edge = start.edges();
+
+        while (edge != null) {
+            if (checkReachable(edge.connects(), destination)) {
+                return true;
+            }
+            edge = edge.next();
+        }
 
         return false;
     }
