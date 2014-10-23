@@ -29,6 +29,47 @@ var Vertex = function () {
     }
 };
 
+var Edge = function () {
+    var connectsTo;
+    var nextEdge;
+
+    return {
+        connects: function (value) {
+            if (value != undefined) {
+                connectsTo = value;
+            }
+            return connectsTo;
+        },
+
+        next: function (value) {
+            if (value != undefined) {
+                nextEdge = value;
+            }
+            return nextEdge;
+        }
+    }
+};
+
+var Graph = function () {
+    function addVertex() {
+
+    }
+
+    function addEdge() {
+
+    }
+
+    function isReachable(vertex) {
+
+    }
+
+    return {
+        addVertex: addVertex,
+        addEdge: addEdge,
+        isReachable: isReachable
+    }
+};
+
 var AdjacencyList = function () {
     this.head = null;
     this.tail = null;
