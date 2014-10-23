@@ -52,9 +52,12 @@ var Edge = function () {
 
 var Graph = function () {
     var verticeList = null;
+    var head = null;
+    var tail = null;
 
-    function addVertex() {
-
+    function addVertex(graph, element) {
+        var node = new Vertex();
+        node.element(element);
     }
 
     function addEdge() {
