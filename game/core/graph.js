@@ -1,12 +1,7 @@
-var Graph = function () {
-    this._numOfEdges = 0;
-    this._adjacencyLists = {};
-};
-
 var Vertex = function () {
     var element;
     var visited;
-    var edges = [];
+    var edges;
     var next;
 
     return {
@@ -68,8 +63,23 @@ var Graph = function () {
         }
     }
 
-    function addEdge() {
+    function addEdge(start, end) {
+        var edges = new Edge();
+        edge.connects(end);
 
+        var edges = start.edges();
+
+        if (edges == null) {
+            edges = edge;
+        } else {
+            // Walk the list until we find the end
+            while (edges.next() != null) {
+                edges = edges.next();
+            }
+
+            // Add this edge to the end of the list
+            edges.next(edge);
+        }
     }
 
     function isReachable(graph, source, destination) {
