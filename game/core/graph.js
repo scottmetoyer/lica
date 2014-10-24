@@ -58,6 +58,14 @@ var Graph = function () {
     function addVertex(graph, element) {
         var node = new Vertex();
         node.element(element);
+
+        if (graph.tail() == null) {
+            graph.head(node);
+            graph.tail(node);
+        } else {
+            graph.tail().next(node);
+            graph.tail(node);
+        }
     }
 
     function addEdge() {
@@ -111,6 +119,16 @@ var Graph = function () {
         addVertex: addVertex,
         addEdge: addEdge,
         isReachable: isReachable,
+        head: function(value) {
+            if (value != undefined) {
+                headNode = value;
+            }
+        },
+        tail: function(value) {
+            if (value != undefined) {
+                tailNode = value;
+            }
+        },
         vertices: function (value) {
             if (value != undefined) {
                 verticeList = value;
