@@ -55,16 +55,16 @@ var Graph = function () {
     var head = null;
     var tail = null;
 
-    function addVertex(graph, element) {
+    function addVertex(element) {
         var node = new Vertex();
         node.element(element);
 
-        if (graph.tail() == null) {
-            graph.head(node);
-            graph.tail(node);
+        if (tail == null) {
+            head = node;
+            tail = node;
         } else {
-            graph.tail().next(node);
-            graph.tail(node);
+            tail.next(node);
+            tail = node;
         }
     }
 
@@ -115,18 +115,28 @@ var Graph = function () {
         return false;
     }
 
+    function toString() {
+        var node = head;
+
+        while (node != null) {
+            console.log(node.element());
+            node = node.next();
+        }
+    }
+
     return {
         addVertex: addVertex,
         addEdge: addEdge,
         isReachable: isReachable,
-        head: function(value) {
+        toString: toString,
+        headNode: function(value) {
             if (value != undefined) {
-                headNode = value;
+                head = value;
             }
         },
-        tail: function(value) {
+        tailNode: function(value) {
             if (value != undefined) {
-                tailNode = value;
+                tail = value;
             }
         },
         vertices: function (value) {
@@ -135,85 +145,5 @@ var Graph = function () {
             }
             return verticeList;
         }
-    }
-};
-
-var AdjacencyList = function () {
-    this.head = null;
-    this.tail = null;
-};
-
-AdjacencyList.prototype.add = function (value) {
-    var vertex = new Vertex(value);
-    if (!this.head && !this.tail) {
-        this.head = vertex;
-    } else {
-        this.tail.next = vertex;
-    }
-    this.tail = vertex;
-};
-
-AdjacencyList.prototype.remove = function () {
-    var detached = null;
-    if (this.head === this.tail) {
-        return null;
-    } else {
-        detached = this.head;
-        this.head = this.head.next;
-        detached.next = null;
-        return detached;
-    }
-};
-
-AdjacencyList.prototype.contains = function (value) {
-    var found = false;
-    currentNode = this.head;
-
-    while (currentNode) {
-        if (currentNode.value == value) {
-            found = true;
-        }
-        currentNode = currentNode.next;
-    }
-
-    return found;
-}
-
-Graph.prototype.addEdge = function (v, w) {
-    this._adjacencyLists[v] = this._adjacencyLists[v] ||
-      new AdjacencyList();
-    this._adjacencyLists[w] = this._adjacencyLists[w] ||
-      new AdjacencyList();
-
-    if (!(this._adjacencyLists[v].contains(w)) && !(this._adjacencyLists[w].contains(v))) {
-        this._adjacencyLists[v].add(w);
-        this._adjacencyLists[w].add(v);
-        this._numOfEdges++;
-    }
-};
-
-Graph.prototype.getVertices = function () {
-    return Object.keys(this._adjacencyLists);
-};
-
-Graph.prototype.getAdjacencyList = function (id) {
-    return this._adjacencyLists[id];
-}
-
-Graph.prototype.toString = function () {
-    var adjString = '';
-    var currentNode = null;
-    var vertices = this.getVertices();
-    console.log(vertices.length + " vertices, " +
-      this._numOfEdges + " edges");
-    for (var i = 0; i < vertices.length; i++) {
-        adjString = vertices[i] + ":";
-        currentNode = this._adjacencyLists[vertices[i]].head;
-        while (currentNode) {
-            adjString += " " + currentNode.value;
-            currentNode = currentNode.next;
-        }
-        console.log(adjString);
-        adjString = '';
     }
 };
