@@ -27,6 +27,7 @@ var Vertex = function () {
 var Edge = function () {
     var connectsTo;
     var nextEdge;
+    var weightValue;
 
     return {
         connects: function (value) {
@@ -41,6 +42,12 @@ var Edge = function () {
                 nextEdge = value;
             }
             return nextEdge;
+        },
+        weight: function (value) {
+            if (value != undefined) {
+                weightValue = value;
+            }
+            return weightValue;
         }
     }
 };
