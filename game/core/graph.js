@@ -71,7 +71,7 @@ var Graph = function () {
     }
 
     function addEdge(start, end, weight) {
-        var edges = new Edge();
+        var edge = new Edge();
         edge.connects(end);
         edge.weight = weight;
 
