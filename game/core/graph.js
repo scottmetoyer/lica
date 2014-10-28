@@ -70,9 +70,10 @@ var Graph = function () {
         }
     }
 
-    function addEdge(start, end) {
+    function addEdge(start, end, weight) {
         var edges = new Edge();
         edge.connects(end);
+        edge.weight = weight;
 
         var edges = start.edges();
 
