@@ -1,8 +1,19 @@
 var Vertex = function () {
     var element;
     var visited;
-    var edges;
     var next;
+    var headEdge = null;
+    var tailEdge = null;
+
+    function addEdge(edge) {
+        if (tailEdge == null) {
+            headEdge = edge;
+            tailEdge = edge;
+        } else {
+            tailEdge.next(edge);
+            tailEdge = edge;
+        }
+    }
 
     return {
         element: function (value) {
@@ -13,14 +24,14 @@ var Vertex = function () {
             if (value != undefined) { visited = value; }
             return visited;
         },
-        edges: function (value) {
-            if (value != undefined) { edges = value; }
-            return edges;
+        edges: function () {
+            return headEdge;
         },
         next: function (value) {
             if (value != undefined) { next = value; }
             return next;
         },
+        addEdge: addEdge
     }
 };
 
@@ -36,7 +47,6 @@ var Edge = function () {
             }
             return connectsTo;
         },
-
         next: function (value) {
             if (value != undefined) {
                 nextEdge = value;
@@ -53,21 +63,22 @@ var Edge = function () {
 };
 
 var Graph = function () {
-    var verticeList = null;
-    var head = null;
-    var tail = null;
+    var headNode = null;
+    var tailNode = null;
 
     function addVertex(element) {
         var node = new Vertex();
         node.element(element);
 
-        if (tail == null) {
-            head = node;
-            tail = node;
+        if (tailNode == null) {
+            headNode = node;
+            tailNode = node;
         } else {
-            tail.next(node);
-            tail = node;
+            tailNode.next(node);
+            tailNode = node;
         }
+
+        return node;
     }
 
     function addEdge(start, end, weight) {
@@ -75,19 +86,9 @@ var Graph = function () {
         edge.connects(end);
         edge.weight = weight;
 
-        var edges = start.edges();
+        start.addEdge(edge);
 
-        if (edges == null) {
-            edges = edge;
-        } else {
-            // Walk the list until we find the end
-            while (edges.next() != null) {
-                edges = edges.next();
-            }
-
-            // Add this edge to the end of the list
-            edges.next(edge);
-        }
+        return edge;
     }
 
     function isReachable(graph, source, destination) {
@@ -105,7 +106,7 @@ var Graph = function () {
         if (start == null) {
             return false;
         }
-            
+
         return checkReachable(start, destination);
     }
 
@@ -147,16 +148,6 @@ var Graph = function () {
         addEdge: addEdge,
         isReachable: isReachable,
         toString: toString,
-        headNode: function(value) {
-            if (value != undefined) {
-                head = value;
-            }
-        },
-        tailNode: function(value) {
-            if (value != undefined) {
-                tail = value;
-            }
-        },
         vertices: function (value) {
             if (value != undefined) {
                 verticeList = value;
