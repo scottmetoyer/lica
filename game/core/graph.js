@@ -148,11 +148,6 @@ var Graph = function () {
         addEdge: addEdge,
         isReachable: isReachable,
         toString: toString,
-        vertices: function (value) {
-            if (value != undefined) {
-                verticeList = value;
-            }
-            return verticeList;
-        }
+        vertices: function () { return hheadNode; }
     }
 };
