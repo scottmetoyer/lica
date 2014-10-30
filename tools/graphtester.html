@@ -17,19 +17,13 @@
     <script src="../game/core/graph.js"></script>
     <script>
         var graph = new Graph();
-        var node1 = "one";
-        var node2 = "two";
-        var node3 = "three";
-        var node4 = "four";
-        var node5 = "five";
-        var node6 = "six";
 
-        graph.addVertex(node1);
-        graph.addVertex(node2);
-        graph.addVertex(node3);
-        graph.addVertex(node4);
-        graph.addVertex(node5);
-        graph.addVertex(node6);
+        var node1 = graph.addVertex("one");
+        var node2 = graph.addVertex("two");
+        var node3 = graph.addVertex("three");
+        var node4 = graph.addVertex("four");
+        var node5 = graph.addVertex("five");
+        var node6 = graph.addVertex("six");
 
         graph.addEdge(node1, node4, 0);
         graph.addEdge(node1, node5, 0);
@@ -39,7 +33,7 @@
         graph.addEdge(node3, node4, 0);
         graph.addEdge(node4, node3, 0);
         graph.addEdge(node4, node6, 0);
-        grade.addEdge(node6, node4, 0);
+        graph.addEdge(node6, node4, 0);
 
         graph.toString();
     </script>

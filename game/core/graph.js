@@ -5,16 +5,6 @@ var Vertex = function () {
     var headEdge = null;
     var tailEdge = null;
 
-    function addEdge(edge) {
-        if (tailEdge == null) {
-            headEdge = edge;
-            tailEdge = edge;
-        } else {
-            tailEdge.next(edge);
-            tailEdge = edge;
-        }
-    }
-
     return {
         element: function (value) {
             if (value != undefined) { element = value; }
@@ -31,7 +21,15 @@ var Vertex = function () {
             if (value != undefined) { next = value; }
             return next;
         },
-        addEdge: addEdge
+        addEdge: function (edge) {
+            if (tailEdge == null) {
+                headEdge = edge;
+                tailEdge = edge;
+            } else {
+                tailEdge.next(edge);
+                tailEdge = edge;
+            }
+        }
     }
 };
 
@@ -135,10 +133,18 @@ var Graph = function () {
     }
 
     function toString() {
-        var node = head;
+        var node = headNode;
 
         while (node != null) {
             console.log(node.element());
+
+            var edge = node.edges();
+
+            while (edge != null) {
+                console.log("connects to " + edge.connects().element());
+                edge = edge.next();
+            }
+
             node = node.next();
         }
     }
