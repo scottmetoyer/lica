@@ -141,10 +141,11 @@ var Graph = function () {
             var edge = node.edges();
 
             while (edge != null) {
-                console.log("connects to " + edge.connects().element());
+                console.log("connects to")
+                console.log(edge.connects().element());
                 edge = edge.next();
             }
-
+            console.log("");
             node = node.next();
         }
     }
@@ -154,6 +155,6 @@ var Graph = function () {
         addEdge: addEdge,
         isReachable: isReachable,
         toString: toString,
-        vertices: function () { return hheadNode; }
+        vertices: function () { return headNode; }
     }
 };

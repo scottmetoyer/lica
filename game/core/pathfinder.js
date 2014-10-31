@@ -25,7 +25,11 @@ var Pathfinder = (function (parameters) {
 
         mesh.links.push(start);
         mesh.links.push(end);
+
         var graph = buildGraph(mesh);
+
+        // Find the shortest path from start to end
+        var path = [];
 
         return path;
     }
@@ -43,9 +47,9 @@ var Pathfinder = (function (parameters) {
 
         for (var i = 0; i < mesh.polygons.length; i++) {
             for (var j = 0; j < nodes.length; j++) {
-                if (Polygon.checkIntersect(nodes[j], linkDiameter, mesh.polygons[i])) {
+                if (Polygon.checkIntersect(nodes[j].element(), linkDiameter, mesh.polygons[i])) {
                     for (var k = 0; k < nodes.length; k++) {
-                        if (Polygon.checkIntersect(nodes[k], linkDiameter, mesh.polygons[i]) && k != j) {
+                        if (Polygon.checkIntersect(nodes[k].element(), linkDiameter, mesh.polygons[i]) && k != j) {
                             // TODO: Calculate edge weight
                             graph.addEdge(nodes[j], nodes[k], 0);
                         }
