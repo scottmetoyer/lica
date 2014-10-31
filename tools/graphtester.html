@@ -27,12 +27,15 @@
 
         graph.addEdge(node1, node4, 0);
         graph.addEdge(node1, node5, 0);
+        graph.addEdge(node5, node1, 0);
         graph.addEdge(node5, node2, 0);
         graph.addEdge(node2, node3, 0);
         graph.addEdge(node2, node5, 0);
         graph.addEdge(node3, node4, 0);
+        graph.addEdge(node3, node2, 0);
         graph.addEdge(node4, node3, 0);
         graph.addEdge(node4, node6, 0);
+        graph.addEdge(node4, node1, 0);
         graph.addEdge(node6, node4, 0);
 
         graph.toString();
