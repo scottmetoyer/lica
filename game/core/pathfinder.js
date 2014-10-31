@@ -23,10 +23,7 @@ var Pathfinder = (function (parameters) {
 
         if (!inBounds) { return []; }
 
-        mesh.links.push(start);
-        mesh.links.push(end);
-
-        var graph = buildGraph(mesh);
+        var graph = buildGraph(mesh, start, end);
 
         // Find the shortest path from start to end
         var path = [];
@@ -35,14 +32,22 @@ var Pathfinder = (function (parameters) {
     }
 
     // Create a navigatable graph from a list of links and polygons
-    function buildGraph(mesh) {
+    function buildGraph(mesh, start, end) {
         var graph = new Graph();
         var nodes = [];
 
+        // Add the start and end nodes
+        var startNode = graph.addVertex(start);
+        var endNode = graph.addVertex(end);
+        nodes.push(startNode);
+        nodes.push(endNode);
+
+        // Add the rest of the nodes
         for (var i = 0; i < mesh.links.length; i++) {
             nodes.push(graph.addVertex(mesh.links[i]));
         }
 
+        // Add the weighted edges
         var linkDiameter = 10;
 
         for (var i = 0; i < mesh.polygons.length; i++) {
@@ -58,7 +63,7 @@ var Pathfinder = (function (parameters) {
             }
         }
 
-        return graph;
+        return {start: startNode, end: endNode };
     }
 
     return {

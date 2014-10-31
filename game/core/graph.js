@@ -145,7 +145,7 @@ var Graph = function () {
                 console.log(edge.connects().element());
                 edge = edge.next();
             }
-            console.log("");
+
             node = node.next();
         }
     }
