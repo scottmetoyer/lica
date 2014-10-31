@@ -9,22 +9,19 @@ var Pathfinder = (function (parameters) {
     // start: The Vector2 start point
     // end: The Vector2 end point
     function navigate(start, end) {
+        start = start.scale(scale);
+        end = end.scale(scale);
         mesh = Navmesh.render(meshJson, scale);
         var inBounds = false;
 
-        start = start.scale(scale);
-        end = end.scale(scale);
-
+        // If the click is out of bounds, just return and do nothing
         for (var i = 0; i < mesh.polygons.length; i++) {
             if (Polygon.checkIntersect(end, 10, mesh.polygons[i])) {
                 inBounds = true;
             }
         }
 
-        // If the click is out of bounds, just return and do nothing
-        if (!inBounds) {
-            return [];
-        }
+        if (!inBounds) { return []; }
 
         mesh.links.push(start);
         mesh.links.push(end);
@@ -36,14 +33,21 @@ var Pathfinder = (function (parameters) {
     // Create a navigatable graph from a list of links and polygons
     function buildGraph(mesh) {
         var graph = new Graph();
+        var nodes = [];
+
+        for (var i = 0; i < mesh.links.length; i++) {
+            nodes.push(graph.addVertex(mesh.links[i]));
+        }
+
         var linkDiameter = 10;
 
         for (var i = 0; i < mesh.polygons.length; i++) {
-            for (var j = 0; j < mesh.links.length; j++) {
-                if (Polygon.checkIntersect(mesh.links[j], linkDiameter, mesh.polygons[i])) {
-                    for (var k = 0; k < mesh.links.length; k++) {
-                        if (Polygon.checkIntersect(mesh.links[k], linkDiameter, mesh.polygons[i]) && k != j) {
-                            graph.addEdge(j, k)
+            for (var j = 0; j < nodes.length; j++) {
+                if (Polygon.checkIntersect(nodes[j], linkDiameter, mesh.polygons[i])) {
+                    for (var k = 0; k < nodes.length; k++) {
+                        if (Polygon.checkIntersect(nodes[k], linkDiameter, mesh.polygons[i]) && k != j) {
+                            // TODO: Calculate edge weight
+                            graph.addEdge(nodes[j], nodes[k], 0);
                         }
                     }
                 }
