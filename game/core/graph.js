@@ -2,6 +2,7 @@ var Vertex = function () {
     var element;
     var visited;
     var next;
+    var weightValue;
     var headEdge = null;
     var tailEdge = null;
 
@@ -29,6 +30,12 @@ var Vertex = function () {
                 tailEdge.next(edge);
                 tailEdge = edge;
             }
+        },
+        weight: function (value) {
+            if (value != undefined) {
+                weightValue = value;
+            }
+            return weightValue;
         }
     }
 };
@@ -36,7 +43,7 @@ var Vertex = function () {
 var Edge = function () {
     var connectsTo;
     var nextEdge;
-    var weightValue;
+    var lengthValue;
 
     return {
         connects: function (value) {
@@ -51,11 +58,11 @@ var Edge = function () {
             }
             return nextEdge;
         },
-        weight: function (value) {
+        length: function (value) {
             if (value != undefined) {
-                weightValue = value;
+                lengthValue = value;
             }
-            return weightValue;
+            return lengthValue;
         }
     }
 };

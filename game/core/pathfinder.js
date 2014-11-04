@@ -4,6 +4,7 @@ var Pathfinder = (function (parameters) {
     var meshJson = parameters.navmeshJson;
     var scale = parameters.scale;
     var mesh;
+    var infinity = 999999;
 
     // Parameters:
     // start: The Vector2 start point
@@ -28,6 +29,8 @@ var Pathfinder = (function (parameters) {
         // Find the shortest path from start to end
         var path = [];
 
+
+
         return path;
     }
 
@@ -38,13 +41,18 @@ var Pathfinder = (function (parameters) {
 
         // Add the start and end nodes
         var startNode = graph.addVertex(start);
-        var endNode = graph.addVertex(end);
+        startNode.weight = 0;
         nodes.push(startNode);
+
+        var endNode = graph.addVertex(end);
+        endNode.weight = infinity;
         nodes.push(endNode);
 
         // Add the rest of the nodes
         for (var i = 0; i < mesh.links.length; i++) {
-            nodes.push(graph.addVertex(mesh.links[i]));
+            var node = graph.addVertex(mesh.links[i]);
+            node.weight = infinity;
+            nodes.push(node);
         }
 
         // Add the weighted edges
@@ -55,7 +63,7 @@ var Pathfinder = (function (parameters) {
                 if (Polygon.checkIntersect(nodes[j].element(), linkDiameter, mesh.polygons[i])) {
                     for (var k = 0; k < nodes.length; k++) {
                         if (Polygon.checkIntersect(nodes[k].element(), linkDiameter, mesh.polygons[i]) && k != j) {
-                            // TODO: Calculate edge weight
+                            // TODO: Calculate edge length
                             graph.addEdge(nodes[j], nodes[k], 0);
                         }
                     }
