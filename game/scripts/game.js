@@ -1,11 +1,15 @@
-var Game = (function () {
-    var nativeWidth = 1280;
-    var widthToHeight = 16 / 9;
-    var startScene = InsideStore;
+window.onload = function() {
+  var game = new Phaser.Game(800, 600, Phaser.AUTO, '', {
+    preload: preload,
+    create: create
+  });
 
-    return {
-        nativeWidth: function () { return nativeWidth; },
-        widthToHeight: function () { return widthToHeight; },
-        startScene: function () { return startScene; }
-    };
-})();
+  function preload() {
+    game.load.image('logo', './assets/backgrounds/phaser-logo-small.png');
+  }
+
+  function create() {
+    var logo = game.add.sprite(game.world.centerX, game.world.centerY, 'logo');
+    logo.anchor.setTo(0.5, 0.5);
+  }
+};
