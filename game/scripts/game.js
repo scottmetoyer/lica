@@ -3,7 +3,8 @@ window.onload = function() {
   var interfaceHeight = 60;
   var showInterface, hideInterface;
 
-  var game = new Phaser.Game(640, 480, Phaser.AUTO, '', {
+  // HVGA resolution to work better on wide devices and phones, 480 x 270, 16:9 aspect ratio
+  var game = new Phaser.Game(480, 270, Phaser.AUTO, '', {
     preload: preload,
     create: create,
     update: update
