@@ -1,9 +1,9 @@
 window.onload = function() {
   var interfaceVisible = false;
-  var interfaceHeight = 100;
+  var interfaceHeight = 60;
   var showInterface, hideInterface;
 
-  var game = new Phaser.Game(800, 600, Phaser.AUTO, '', {
+  var game = new Phaser.Game(640, 480, Phaser.AUTO, '', {
     preload: preload,
     create: create,
     update: update
