@@ -1,6 +1,6 @@
 window.onload = function() {
   var interfaceVisible = false;
-  var interfaceHeight = 60;
+  var interfaceHeight = 35;
   var interfaceButtonGroup;
   var showInterface, hideInterface;
 
